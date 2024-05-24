@@ -1,0 +1,12 @@
+---
+title: "WV Tourism Shiny Map"
+subtitle: "My first end-to-end solo data project."
+format: html
+description: "Join me as I work through the first part of the book, *Getting Started*."
+date: "2024-05-24"
+image: ../resources/images/
+categories: ["R", "Project"]
+number-sections: false
+editor_options: 
+  chunk_output_type: console
+---

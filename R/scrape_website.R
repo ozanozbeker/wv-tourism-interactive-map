@@ -5,11 +5,15 @@ library(rvest) # Easily Harvest (Scrape) Web Pages
 source("R/functions.R") # Custom Functions
 
 # Website Map ----
-# Base URL
-url_base = "https://wvtourism.com"
-url_sitemap = "/sitemap_index.xml"
-url_page = "/"
+# URLs
+url_page = "https://wvtourism.com/page-sitemap.xml"
+url_company = c(
+  "https://wvtourism.com/company-sitemap.xml",
+  "https://wvtourism.com/company-sitemap2.xml",
+  "https://wvtourism.com/company-sitemap3.xml")
 
-sitemap_xml = read_xml(str_c(url_base, url_sitemap))
-sitemap = extract_sitemap(sitemap_xml)
+directories = extract_sitemap_table(url_page)
+companies = map(url_company, extract_sitemap_table) |> list_rbind()
 
+# Places to Go ----
+places_to_go = directories |> filter(str_detect(url, "places-to-go"))

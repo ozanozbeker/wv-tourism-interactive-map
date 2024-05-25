@@ -38,3 +38,5 @@ Looking at the links, you can see how the website has organized its information.
 | No          | Release & Posts        | Contains news releases and standalone articles.                      |
 
 : Overview of index sitemaps.
+
+## Geographical Data

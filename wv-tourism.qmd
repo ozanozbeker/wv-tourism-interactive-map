@@ -39,4 +39,6 @@ Looking at the links, you can see how the website has organized its information.
 
 : Overview of index sitemaps.
 
+After a lot of research, I decided that directories are a useful resource to explore the website, but will not be the map I was looking for. The website contains many circular links that are helpful when browsing as a user, but not so much when trying to build a scraping hierarchy.
+
 ## Geographical Data

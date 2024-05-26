@@ -17,3 +17,5 @@ companies = map(url_company, extract_sitemap_table) |> list_rbind()
 
 # Places to Go ----
 places_to_go = directories |> filter(str_detect(url, "places-to-go"))
+
+public_la

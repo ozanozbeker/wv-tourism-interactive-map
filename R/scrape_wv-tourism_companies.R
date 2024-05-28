@@ -3,6 +3,7 @@ library(tidyverse) # Load the Tidyverse
 library(httr2) # HTTP Requests
 library(xml2)  # Parse XML
 library(rvest) # Parse HTML
+library(googleway) # Google Maps API
 
 # Functions ----
 get_request = function(url) {
@@ -60,8 +61,66 @@ extract_info = function(resp) {
   return(data)
 }
 
+address_cleaner = function(address) {
+  address |>
+    str_to_upper() |>
+    str_replace_all(",,", ",") |>
+    str_remove_all("[.]") |>
+    str_remove(" WV,| WEST VIRGINIA,") |>
+    str_squish()
+}
+
+extract_after_last_comma = function(address_clean) {
+  last_comma = address_clean |>
+    str_locate_all(",") |>
+    as_tibble(.name_repair = janitor::make_clean_names) |>
+    slice_tail(n = 1) |>
+    pull(1)
+
+  tryCatch({
+    text = address_clean |>
+    str_sub(last_comma[[1]] + 2, -1) |>
+    str_squish()
+
+    return(text)
+
+  }, error = function(e) {
+
+    return(NA_character_)
+
+  })
+}
+
+extract_before_last_comma = function(address_clean) {
+  last_comma = address_clean |>
+    str_locate_all(",") |>
+    as_tibble(.name_repair = janitor::make_clean_names) |>
+    slice_tail(n = 1) |>
+    pull(1)
+
+  tryCatch({
+    text = address_clean |>
+    str_sub(1, last_comma[[1]] - 1) |>
+    str_squish()
+
+    return(text)
+
+  }, error = function(e) {
+
+    return(address_clean)
+
+  })
+}
+
 # Data ----
 history = read_rds("Pipeline/companies.rds")
+
+# Table of zip codes and details based on USPS standards.
+# Population from 2020 census.
+# From https://www.unitedstateszipcodes.org/zip-code-database/
+wv_zips = read_csv("Data/zip_code_database.csv", show_col_types = FALSE) |>
+  filter(state == "WV") |>
+  select(zip, primary_city, acceptable_cities, county, population = irs_estimated_population)
 
 urls = c(
   "https://wvtourism.com/company-sitemap.xml",
@@ -70,7 +129,8 @@ urls = c(
 
 # Scrape ----
 # Get the current list of companies
-sitemap_responses = map(urls, get_request) |>
+sitemap_responses = urls |>
+  map(get_request) |>
   req_perform_sequential(on_error = "continue")
 
 sitemap_failures = resps_failures(sitemap_responses) # Not used anywhere
@@ -97,6 +157,51 @@ info = resps_successes(info_responses) |>
   mutate(
     across(where(is.character), \(col) if_else(col == "", NA, col)),
     across(where(is.character), \(col) if_else(str_to_upper(col) == "NA|N/A", NA, col)))
+
+# Tidy the data ----
+
+# Need to separate the instances where it's actually the latitude and longitude
+# Other filters: no commas (row 233)
+# Do something so if there is no street, city doesn't get removed
+#   This could also be fixed by ignoring and filling in city via zipcode
+
+# Maybe add one final human check on bad city and street names
+# - streets with more than 1 comma (297)
+# - cities with nonstandard characters (297)
+
+# Maybe do something about PO boxes?
+
+# Check to see where zipcode is NA (362)
+# Get a list of all WV zipcodes to cross reference
+
+test = info |>
+  select(address) |>
+  filter(!is.na(address)) |>
+  mutate(
+    address_clean = address_cleaner(address),
+    state = "WV",
+    zipcode = address_clean |> str_extract("\\d{5}$|\\d{5}-\\d{4}$") |> str_sub(1, 5),
+    address_clean = address_clean |> str_remove(", \\d{5}$|, \\d{5}-\\d{4}$") |> str_squish()) |>
+  rowwise() |>
+  mutate(
+    city = extract_after_last_comma(address_clean),
+    street = extract_before_last_comma(address_clean)) |>
+  ungroup() |>
+  select(-address_clean) |>
+  mutate(across(c(street, city), str_to_title))
+
+info_address = info |>
+  select(url, name, address) |>
+  filter(address |> str_remove_all("[:punct:]") |> str_detect("[:alpha:]", negate = FALSE))
+
+info_geo = info |>
+  select(url, name, address) |>
+  filter(address |> str_remove_all("[:punct:]") |> str_detect("[:alpha:]", negate = TRUE)) |>
+  rowwise() |>
+  mutate(
+    latitude = extract_before_last_comma(address) |> parse_number(),
+    longitude = extract_after_last_comma(address) |> parse_number()
+  )
 
 # Save Results ----
 companies = history |>

@@ -82,7 +82,7 @@ sitemap = resps_successes(sitemap_responses) |>
 
 # Get new company pages only if they haven't been updated
 info_responses = sitemap |>
-  # anti_join(history, join_by(url, last_modified)) |>
+  anti_join(history, join_by(url, last_modified)) |>
   arrange(url) |>
   pull(url) |>
   map(get_request) |>
@@ -94,13 +94,16 @@ info = resps_successes(info_responses) |>
   map(extract_info, .progress = TRUE) |>
   list_rbind() |>
   left_join(sitemap, join_by(url)) |>
-  mutate(across(where(is.character), \(col) if_else(col == "", NA, col)))
+  mutate(
+    across(where(is.character), \(col) if_else(col == "", NA, col)),
+    across(where(is.character), \(col) if_else(str_to_upper(col) == "NA|N/A", NA, col)))
 
 # Save Results ----
-# companies = history |>
-#   anti_join(info, join_by(url)) |>
-#   union(info)
+companies = history |>
+  anti_join(info, join_by(url)) |>
+  union(info)
 
-write_rds(info, "Pipeline/companies.rds")
+write_rds(companies, "Pipeline/companies.rds")
+write_csv(companies, "Output/companies.csv", na = "")
 
 # Do something for failures if it becomes an issue

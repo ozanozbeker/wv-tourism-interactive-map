@@ -1,0 +1,858 @@
+zip,type,primary_city,state,county,country,irs_estimated_population
+24701,STANDARD,Bluefield,WV,Mercer County,US,15130
+24712,STANDARD,Athens,WV,Mercer County,US,1500
+24714,STANDARD,Beeson,WV,Mercer County,US,121
+24715,STANDARD,Bramwell,WV,Mercer County,US,340
+24716,PO BOX,Bud,WV,Wyoming County,US,553
+24719,PO BOX,Covel,WV,Wyoming County,US,104
+24724,STANDARD,Freeman,WV,Mercer County,US,109
+24726,STANDARD,Herndon,WV,Wyoming County,US,350
+24729,PO BOX,Hiawatha,WV,Mercer County,US,38
+24731,STANDARD,Kegley,WV,Mercer County,US,320
+24732,PO BOX,Kellysville,WV,Mercer County,US,107
+24733,STANDARD,Lashmeet,WV,Mercer County,US,690
+24736,STANDARD,Matoaka,WV,Mercer County,US,470
+24737,PO BOX,Montcalm,WV,Mercer County,US,728
+24738,PO BOX,Nemours,WV,Mercer County,US,176
+24739,STANDARD,Princeton,WV,Mercer County,US,53
+24740,STANDARD,Princeton,WV,Mercer County,US,12890
+24747,STANDARD,Rock,WV,Mercer County,US,1880
+24751,PO BOX,Wolfe,WV,Mercer County,US,32
+24801,STANDARD,Welch,WV,McDowell County,US,2310
+24808,STANDARD,Anawalt,WV,McDowell County,US,300
+24811,PO BOX,Avondale,WV,McDowell County,US,359
+24813,PO BOX,Bartley,WV,McDowell County,US,204
+24815,STANDARD,Berwind,WV,McDowell County,US,230
+24816,PO BOX,Big Sandy,WV,McDowell County,US,90
+24817,PO BOX,Bradshaw,WV,McDowell County,US,523
+24818,STANDARD,Brenton,WV,Wyoming County,US,750
+24822,STANDARD,Clear Fork,WV,Wyoming County,US,530
+24823,STANDARD,Coal Mountain,WV,Wyoming County,US,230
+24826,PO BOX,Cucumber,WV,McDowell County,US,73
+24827,STANDARD,Cyclone,WV,Wyoming County,US,790
+24828,STANDARD,Davy,WV,McDowell County,US,430
+24829,STANDARD,Eckman,WV,McDowell County,US,118
+24830,STANDARD,Elbert,WV,McDowell County,US,111
+24831,STANDARD,Elkhorn,WV,McDowell County,US,110
+24834,PO BOX,Fanrock,WV,Wyoming County,US,148
+24836,PO BOX,Gary,WV,McDowell County,US,536
+24839,STANDARD,Hanover,WV,Wyoming County,US,720
+24842,PO BOX,Hemphill,WV,McDowell County,US,0
+24843,PO BOX,Hensley,WV,McDowell County,US,85
+24844,STANDARD,Iaeger,WV,McDowell County,US,1190
+24845,PO BOX,Ikes Fork,WV,Wyoming County,US,233
+24846,STANDARD,Isaban,WV,Mingo County,US,144
+24847,PO BOX,Itmann,WV,Wyoming County,US,247
+24848,PO BOX,Jenkinjones,WV,McDowell County,US,86
+24849,STANDARD,Jesse,WV,Wyoming County,US,230
+24850,STANDARD,Jolo,WV,McDowell County,US,560
+24851,PO BOX,Justice,WV,Mingo County,US,302
+24853,PO BOX,Kimball,WV,McDowell County,US,632
+24854,PO BOX,Kopperston,WV,Wyoming County,US,280
+24855,STANDARD,Kyle,WV,McDowell County,US,54
+24857,PO BOX,Lynco,WV,Wyoming County,US,513
+24859,PO BOX,Marianna,WV,Wyoming County,US,0
+24860,STANDARD,Matheny,WV,Wyoming County,US,340
+24861,PO BOX,Maybeury,WV,McDowell County,US,197
+24862,STANDARD,Mohawk,WV,McDowell County,US,260
+24866,PO BOX,Newhall,WV,McDowell County,US,170
+24867,PO BOX,New Richmond,WV,Wyoming County,US,151
+24868,STANDARD,Northfork,WV,McDowell County,US,670
+24869,STANDARD,North Spring,WV,Wyoming County,US,179
+24870,STANDARD,Oceana,WV,Wyoming County,US,2790
+24871,PO BOX,Pageton,WV,McDowell County,US,165
+24872,STANDARD,Panther,WV,McDowell County,US,510
+24873,STANDARD,Paynesville,WV,McDowell County,US,360
+24874,STANDARD,Pineville,WV,Wyoming County,US,2110
+24878,PO BOX,Premier,WV,McDowell County,US,260
+24879,STANDARD,Raysal,WV,McDowell County,US,250
+24880,STANDARD,Rock View,WV,Wyoming County,US,200
+24881,PO BOX,Roderfield,WV,McDowell County,US,432
+24882,STANDARD,Simon,WV,Wyoming County,US,280
+24884,STANDARD,Squire,WV,McDowell County,US,206
+24887,PO BOX,Switchback,WV,McDowell County,US,44
+24888,PO BOX,Thorpe,WV,McDowell County,US,161
+24892,STANDARD,War,WV,McDowell County,US,690
+24894,PO BOX,Warriormine,WV,McDowell County,US,208
+24895,PO BOX,Wilcoe,WV,McDowell County,US,117
+24898,STANDARD,Wyoming,WV,Wyoming County,US,157
+24901,STANDARD,Lewisburg,WV,Greenbrier County,US,7510
+24902,PO BOX,Fairlea,WV,Greenbrier County,US,105
+24910,STANDARD,Alderson,WV,Greenbrier County,US,3080
+24915,STANDARD,Arbovale,WV,Pocahontas County,US,390
+24916,STANDARD,Asbury,WV,Greenbrier County,US,290
+24918,STANDARD,Ballard,WV,Monroe County,US,1190
+24920,STANDARD,Bartow,WV,Pocahontas County,US,270
+24924,STANDARD,Buckeye,WV,Pocahontas County,US,370
+24925,STANDARD,Caldwell,WV,Greenbrier County,US,920
+24927,STANDARD,Cass,WV,Pocahontas County,US,260
+24931,STANDARD,Crawley,WV,Greenbrier County,US,1390
+24934,STANDARD,Dunmore,WV,Pocahontas County,US,400
+24935,STANDARD,Forest Hill,WV,Summers County,US,450
+24938,STANDARD,Frankford,WV,Greenbrier County,US,1270
+24941,STANDARD,Gap Mills,WV,Monroe County,US,770
+24943,STANDARD,Grassy Meadows,WV,Greenbrier County,US,118
+24944,STANDARD,Green Bank,WV,Pocahontas County,US,490
+24945,STANDARD,Greenville,WV,Monroe County,US,420
+24946,STANDARD,Hillsboro,WV,Pocahontas County,US,990
+24951,STANDARD,Lindside,WV,Monroe County,US,1330
+24954,STANDARD,Marlinton,WV,Pocahontas County,US,2530
+24957,STANDARD,Maxwelton,WV,Greenbrier County,US,470
+24961,STANDARD,White Sulphur Springs,WV,Greenbrier County,US,0
+24962,STANDARD,Pence Springs,WV,Summers County,US,136
+24963,STANDARD,Peterstown,WV,Monroe County,US,3270
+24966,STANDARD,Renick,WV,Greenbrier County,US,950
+24970,STANDARD,Ronceverte,WV,Greenbrier County,US,3290
+24974,STANDARD,Secondcreek,WV,Monroe County,US,179
+24976,STANDARD,Sinks Grove,WV,Monroe County,US,870
+24977,STANDARD,Smoot,WV,Greenbrier County,US,350
+24981,STANDARD,Talcott,WV,Summers County,US,570
+24983,STANDARD,Union,WV,Monroe County,US,1850
+24984,STANDARD,Waiteville,WV,Monroe County,US,90
+24985,STANDARD,Wayside,WV,Monroe County,US,225
+24986,STANDARD,White Sulphur Springs,WV,Greenbrier County,US,4030
+24991,STANDARD,Williamsburg,WV,Greenbrier County,US,360
+24993,STANDARD,Wolfcreek,WV,Monroe County,US,55
+25002,PO BOX,Alloy,WV,Fayette County,US,155
+25003,STANDARD,Alum Creek,WV,Lincoln County,US,1980
+25005,STANDARD,Amma,WV,Roane County,US,240
+25007,STANDARD,Arnett,WV,Raleigh County,US,370
+25008,STANDARD,Artie,WV,Raleigh County,US,152
+25009,STANDARD,Ashford,WV,Boone County,US,740
+25011,PO BOX,Bancroft,WV,Putnam County,US,519
+25015,STANDARD,Belle,WV,Kanawha County,US,3380
+25019,STANDARD,Bickmore,WV,Clay County,US,430
+25021,STANDARD,Bim,WV,Boone County,US,201
+25022,PO BOX,Blair,WV,Logan County,US,143
+25024,STANDARD,Bloomingrose,WV,Boone County,US,330
+25025,STANDARD,Blount,WV,Kanawha County,US,143
+25026,PO BOX,Blue Creek,WV,Kanawha County,US,101
+25028,STANDARD,Bob White,WV,Boone County,US,328
+25030,STANDARD,Bomont,WV,Clay County,US,410
+25031,PO BOX,Boomer,WV,Fayette County,US,514
+25033,STANDARD,Buffalo,WV,Putnam County,US,1900
+25035,STANDARD,Cabin Creek,WV,Kanawha County,US,720
+25036,PO BOX,Cannelton,WV,Fayette County,US,495
+25039,STANDARD,Cedar Grove,WV,Kanawha County,US,740
+25040,PO BOX,Charlton Heights,WV,Fayette County,US,460
+25043,STANDARD,Clay,WV,Clay County,US,1150
+25044,STANDARD,Clear Creek,WV,Raleigh County,US,260
+25045,STANDARD,Clendenin,WV,Kanawha County,US,3860
+25047,STANDARD,Clothier,WV,Logan County,US,230
+25048,STANDARD,Colcord,WV,Raleigh County,US,141
+25049,STANDARD,Comfort,WV,Boone County,US,530
+25051,STANDARD,Costa,WV,Boone County,US,174
+25053,STANDARD,Danville,WV,Boone County,US,2970
+25054,PO BOX,Dawes,WV,Kanawha County,US,579
+25057,PO BOX,Deep Water,WV,Fayette County,US,218
+25059,STANDARD,Dixie,WV,Fayette County,US,460
+25060,STANDARD,Dorothy,WV,Raleigh County,US,250
+25061,PO BOX,Drybranch,WV,Kanawha County,US,385
+25062,STANDARD,Dry Creek,WV,Raleigh County,US,198
+25063,STANDARD,Duck,WV,Braxton County,US,1120
+25064,STANDARD,Dunbar,WV,Kanawha County,US,7250
+25067,STANDARD,East Bank,WV,Kanawha County,US,840
+25070,PO BOX,Eleanor,WV,Putnam County,US,1700
+25071,STANDARD,Elkview,WV,Kanawha County,US,8740
+25075,STANDARD,Eskdale,WV,Kanawha County,US,440
+25076,PO BOX,Ethel,WV,Logan County,US,354
+25079,STANDARD,Falling Rock,WV,Kanawha County,US,160
+25081,STANDARD,Foster,WV,Boone County,US,920
+25082,STANDARD,Fraziers Bottom,WV,Putnam County,US,1780
+25083,STANDARD,Gallagher,WV,Kanawha County,US,400
+25085,STANDARD,Gauley Bridge,WV,Fayette County,US,640
+25086,PO BOX,Glasgow,WV,Kanawha County,US,714
+25088,STANDARD,Glen,WV,Clay County,US,91
+25090,PO BOX,Glen Ferris,WV,Fayette County,US,104
+25093,STANDARD,Gordon,WV,Boone County,US,221
+25102,PO BOX,Handley,WV,Kanawha County,US,246
+25103,STANDARD,Hansford,WV,Kanawha County,US,230
+25106,STANDARD,Henderson,WV,Mason County,US,470
+25107,STANDARD,Hernshaw,WV,Kanawha County,US,440
+25108,STANDARD,Hewett,WV,Boone County,US,540
+25109,PO BOX,Hometown,WV,Putnam County,US,410
+25110,PO BOX,Hugheston,WV,Kanawha County,US,368
+25111,STANDARD,Indore,WV,Clay County,US,420
+25112,PO BOX,Institute,WV,Kanawha County,US,400
+25113,STANDARD,Ivydale,WV,Clay County,US,590
+25114,STANDARD,Jeffrey,WV,Boone County,US,280
+25115,STANDARD,Kanawha Falls,WV,Fayette County,US,22
+25118,STANDARD,Kimberly,WV,Fayette County,US,390
+25119,STANDARD,Kincaid,WV,Fayette County,US,420
+25121,STANDARD,Lake,WV,Logan County,US,530
+25123,STANDARD,Leon,WV,Mason County,US,2530
+25124,STANDARD,Liberty,WV,Putnam County,US,1020
+25125,STANDARD,Lizemores,WV,Clay County,US,560
+25126,PO BOX,London,WV,Kanawha County,US,210
+25130,STANDARD,Madison,WV,Boone County,US,2790
+25132,STANDARD,Mammoth,WV,Kanawha County,US,230
+25133,STANDARD,Maysel,WV,Clay County,US,520
+25134,PO BOX,Miami,WV,Kanawha County,US,399
+25136,STANDARD,Montgomery,WV,Fayette County,US,910
+25139,STANDARD,Mount Carbon,WV,Fayette County,US,430
+25140,STANDARD,Naoma,WV,Raleigh County,US,500
+25141,STANDARD,Nebo,WV,Clay County,US,238
+25142,STANDARD,Nellis,WV,Boone County,US,260
+25143,STANDARD,Nitro,WV,Kanawha County,US,7040
+25148,STANDARD,Orgas,WV,Boone County,US,220
+25149,PO BOX,Ottawa,WV,Boone County,US,227
+25152,PO BOX,Page,WV,Fayette County,US,222
+25154,STANDARD,Peytona,WV,Boone County,US,650
+25156,PO BOX,Pinch,WV,Kanawha County,US,867
+25159,STANDARD,Poca,WV,Putnam County,US,4400
+25160,STANDARD,Pond Gap,WV,Kanawha County,US,200
+25161,STANDARD,Powellton,WV,Fayette County,US,390
+25162,PO BOX,Pratt,WV,Kanawha County,US,529
+25164,STANDARD,Procious,WV,Clay County,US,860
+25165,STANDARD,Racine,WV,Boone County,US,460
+25168,STANDARD,Red House,WV,Putnam County,US,2460
+25169,STANDARD,Ridgeview,WV,Boone County,US,290
+25173,STANDARD,Robson,WV,Fayette County,US,300
+25174,STANDARD,Rock Creek,WV,Raleigh County,US,310
+25177,STANDARD,Saint Albans,WV,Kanawha County,US,19040
+25180,STANDARD,Saxon,WV,Raleigh County,US,50
+25181,STANDARD,Seth,WV,Boone County,US,1020
+25183,PO BOX,Sharples,WV,Logan County,US,142
+25185,UNIQUE,Mount Olive,WV,Fayette County,US,69
+25186,PO BOX,Smithers,WV,Fayette County,US,791
+25187,STANDARD,Southside,WV,Mason County,US,510
+25193,STANDARD,Sylvester,WV,Boone County,US,220
+25201,PO BOX,Tad,WV,Kanawha County,US,344
+25202,STANDARD,Tornado,WV,Kanawha County,US,1230
+25203,STANDARD,Turtle Creek,WV,Boone County,US,240
+25204,STANDARD,Twilight,WV,Boone County,US,123
+25205,PO BOX,Uneeda,WV,Boone County,US,423
+25206,STANDARD,Van,WV,Boone County,US,330
+25208,STANDARD,Wharton,WV,Boone County,US,590
+25209,STANDARD,Whitesville,WV,Boone County,US,710
+25211,PO BOX,Widen,WV,Clay County,US,72
+25213,STANDARD,Winfield,WV,Putnam County,US,5720
+25214,STANDARD,Winifrede,WV,Kanawha County,US,450
+25231,STANDARD,Advent,WV,Jackson County,US,43
+25234,STANDARD,Arnoldsburg,WV,Calhoun County,US,680
+25235,STANDARD,Chloe,WV,Calhoun County,US,650
+25239,STANDARD,Cottageville,WV,Jackson County,US,1430
+25241,STANDARD,Evans,WV,Jackson County,US,1560
+25243,STANDARD,Gandeeville,WV,Roane County,US,740
+25244,STANDARD,Gay,WV,Jackson County,US,600
+25245,STANDARD,Given,WV,Jackson County,US,940
+25247,PO BOX,Hartford,WV,Mason County,US,458
+25248,STANDARD,Kenna,WV,Jackson County,US,2600
+25251,STANDARD,Left Hand,WV,Roane County,US,300
+25252,STANDARD,Le Roy,WV,Jackson County,US,840
+25253,STANDARD,Letart,WV,Mason County,US,1610
+25259,STANDARD,Looneyville,WV,Roane County,US,540
+25260,STANDARD,Mason,WV,Mason County,US,1210
+25261,STANDARD,Millstone,WV,Calhoun County,US,260
+25262,STANDARD,Millwood,WV,Jackson County,US,810
+25264,STANDARD,Mount Alto,WV,Jackson County,US,310
+25265,PO BOX,New Haven,WV,Mason County,US,1284
+25266,STANDARD,Newton,WV,Roane County,US,560
+25267,STANDARD,Normantown,WV,Gilmer County,US,570
+25268,STANDARD,Orma,WV,Calhoun County,US,430
+25270,STANDARD,Reedy,WV,Roane County,US,700
+25271,STANDARD,Ripley,WV,Jackson County,US,7540
+25275,STANDARD,Sandyville,WV,Jackson County,US,1810
+25276,STANDARD,Spencer,WV,Roane County,US,5470
+25285,STANDARD,Wallback,WV,Clay County,US,570
+25286,STANDARD,Walton,WV,Roane County,US,1090
+25287,STANDARD,West Columbia,WV,Mason County,US,580
+25301,STANDARD,Charleston,WV,Kanawha County,US,1610
+25302,STANDARD,Charleston,WV,Kanawha County,US,11440
+25303,STANDARD,South Charleston,WV,Kanawha County,US,6160
+25304,STANDARD,Charleston,WV,Kanawha County,US,6410
+25305,STANDARD,Charleston,WV,Kanawha County,US,0
+25306,STANDARD,Charleston,WV,Kanawha County,US,4940
+25309,STANDARD,South Charleston,WV,Kanawha County,US,10040
+25311,STANDARD,Charleston,WV,Kanawha County,US,6900
+25312,STANDARD,Charleston,WV,Kanawha County,US,7060
+25313,STANDARD,Charleston,WV,Kanawha County,US,10440
+25314,STANDARD,Charleston,WV,Kanawha County,US,13260
+25315,STANDARD,Charleston,WV,Kanawha County,US,2170
+25317,UNIQUE,Charleston,WV,Kanawha County,US,0
+25320,STANDARD,Charleston,WV,Kanawha County,US,4250
+25321,PO BOX,Charleston,WV,Kanawha County,US,108
+25322,PO BOX,Charleston,WV,Kanawha County,US,109
+25323,PO BOX,Charleston,WV,Kanawha County,US,95
+25324,PO BOX,Charleston,WV,Kanawha County,US,77
+25325,PO BOX,Charleston,WV,Kanawha County,US,62
+25326,PO BOX,Charleston,WV,Kanawha County,US,62
+25327,PO BOX,Charleston,WV,Kanawha County,US,78
+25328,PO BOX,Charleston,WV,Kanawha County,US,70
+25329,PO BOX,Charleston,WV,Kanawha County,US,57
+25330,PO BOX,Charleston,WV,Kanawha County,US,72
+25331,PO BOX,Charleston,WV,Kanawha County,US,0
+25332,PO BOX,Charleston,WV,Kanawha County,US,0
+25333,PO BOX,Charleston,WV,Kanawha County,US,0
+25334,PO BOX,Charleston,WV,Kanawha County,US,0
+25335,PO BOX,Charleston,WV,Kanawha County,US,0
+25336,PO BOX,Charleston,WV,Kanawha County,US,0
+25337,PO BOX,Charleston,WV,Kanawha County,US,26
+25338,PO BOX,Charleston,WV,Kanawha County,US,0
+25339,PO BOX,Charleston,WV,Kanawha County,US,260
+25350,PO BOX,Charleston,WV,Kanawha County,US,0
+25356,PO BOX,Charleston,WV,Kanawha County,US,357
+25357,PO BOX,Charleston,WV,Kanawha County,US,141
+25358,PO BOX,Charleston,WV,Kanawha County,US,125
+25360,PO BOX,Charleston,WV,Kanawha County,US,745
+25361,PO BOX,Charleston,WV,Kanawha County,US,187
+25362,PO BOX,Charleston,WV,Kanawha County,US,549
+25364,PO BOX,Charleston,WV,Kanawha County,US,373
+25365,PO BOX,Charleston,WV,Kanawha County,US,174
+25375,PO BOX,Charleston,WV,Kanawha County,US,137
+25387,STANDARD,Charleston,WV,Kanawha County,US,0
+25389,STANDARD,Charleston,WV,Kanawha County,US,0
+25392,UNIQUE,Charleston,WV,Kanawha County,US,0
+25396,UNIQUE,Charleston,WV,Kanawha County,US,0
+25401,STANDARD,Martinsburg,WV,Berkeley County,US,12200
+25402,PO BOX,Martinsburg,WV,Berkeley County,US,2220
+25403,STANDARD,Martinsburg,WV,Berkeley County,US,15410
+25404,STANDARD,Martinsburg,WV,Berkeley County,US,20380
+25405,STANDARD,Martinsburg,WV,Berkeley County,US,12520
+25410,PO BOX,Bakerton,WV,Washington County,US,101
+25411,STANDARD,Berkeley Springs,WV,Morgan County,US,11230
+25413,STANDARD,Bunker Hill,WV,Berkeley County,US,9330
+25414,STANDARD,Charles Town,WV,Jefferson County,US,17780
+25419,STANDARD,Falling Waters,WV,Berkeley County,US,11430
+25420,STANDARD,Gerrardstown,WV,Berkeley County,US,4230
+25421,STANDARD,Glengary,WV,Berkeley County,US,222
+25422,STANDARD,Great Cacapon,WV,Morgan County,US,1320
+25423,PO BOX,Halltown,WV,Jefferson County,US,195
+25425,STANDARD,Harpers Ferry,WV,Jefferson County,US,11870
+25427,STANDARD,Hedgesville,WV,Berkeley County,US,15560
+25428,STANDARD,Inwood,WV,Berkeley County,US,11880
+25429,UNIQUE,Martinsburg,WV,Berkeley County,US,0
+25430,STANDARD,Kearneysville,WV,Jefferson County,US,7970
+25431,STANDARD,Levels,WV,Hampshire County,US,250
+25432,STANDARD,Millville,WV,Jefferson County,US,257
+25434,STANDARD,Paw Paw,WV,Hampshire County,US,1700
+25437,STANDARD,Points,WV,Hampshire County,US,390
+25438,STANDARD,Ranson,WV,Jefferson County,US,6700
+25440,PO BOX,Ridgeway,WV,Berkeley County,US,0
+25441,PO BOX,Rippon,WV,Jefferson County,US,317
+25442,STANDARD,Shenandoah Junction,WV,Jefferson County,US,1800
+25443,STANDARD,Shepherdstown,WV,Jefferson County,US,6590
+25444,STANDARD,Slanesville,WV,Hampshire County,US,680
+25446,STANDARD,Summit Point,WV,Jefferson County,US,1310
+25501,STANDARD,Alkol,WV,Lincoln County,US,980
+25502,STANDARD,Apple Grove,WV,Mason County,US,860
+25503,STANDARD,Ashton,WV,Mason County,US,630
+25504,STANDARD,Barboursville,WV,Cabell County,US,10400
+25505,STANDARD,Big Creek,WV,Logan County,US,260
+25506,STANDARD,Branchland,WV,Lincoln County,US,3230
+25507,PO BOX,Ceredo,WV,Wayne County,US,1274
+25508,STANDARD,Chapmanville,WV,Logan County,US,6510
+25510,STANDARD,Culloden,WV,Cabell County,US,4350
+25511,STANDARD,Dunlow,WV,Wayne County,US,670
+25512,STANDARD,East Lynn,WV,Wayne County,US,770
+25514,STANDARD,Fort Gay,WV,Wayne County,US,2830
+25515,STANDARD,Gallipolis Ferry,WV,Mason County,US,1670
+25517,STANDARD,Genoa,WV,Wayne County,US,1260
+25520,STANDARD,Glenwood,WV,Cabell County,US,1110
+25521,STANDARD,Griffithsville,WV,Lincoln County,US,800
+25523,STANDARD,Hamlin,WV,Lincoln County,US,2030
+25524,STANDARD,Harts,WV,Lincoln County,US,2390
+25526,STANDARD,Hurricane,WV,Putnam County,US,19870
+25529,STANDARD,Julian,WV,Boone County,US,560
+25530,STANDARD,Kenova,WV,Wayne County,US,4610
+25534,STANDARD,Kiahsville,WV,Wayne County,US,132
+25535,STANDARD,Lavalette,WV,Wayne County,US,2150
+25537,STANDARD,Lesage,WV,Cabell County,US,1650
+25540,STANDARD,Midkiff,WV,Lincoln County,US,220
+25541,STANDARD,Milton,WV,Cabell County,US,8250
+25544,STANDARD,Myra,WV,Lincoln County,US,34
+25545,STANDARD,Ona,WV,Cabell County,US,4120
+25547,STANDARD,Pecks Mill,WV,Logan County,US,720
+25550,STANDARD,Point Pleasant,WV,Mason County,US,6870
+25555,STANDARD,Prichard,WV,Wayne County,US,1770
+25557,STANDARD,Ranger,WV,Lincoln County,US,890
+25559,STANDARD,Salt Rock,WV,Cabell County,US,1850
+25560,STANDARD,Scott Depot,WV,Putnam County,US,8570
+25562,PO BOX,Shoals,WV,Wayne County,US,127
+25564,STANDARD,Sod,WV,Lincoln County,US,1060
+25565,STANDARD,Spurlockville,WV,Lincoln County,US,440
+25567,STANDARD,Sumerco,WV,Lincoln County,US,650
+25569,PO BOX,Teays,WV,Putnam County,US,117
+25570,STANDARD,Wayne,WV,Wayne County,US,4570
+25571,STANDARD,West Hamlin,WV,Lincoln County,US,1910
+25572,STANDARD,Woodville,WV,Lincoln County,US,0
+25573,STANDARD,Yawkey,WV,Lincoln County,US,610
+25601,STANDARD,Logan,WV,Logan County,US,4080
+25606,PO BOX,Accoville,WV,Logan County,US,803
+25607,STANDARD,Amherstdale,WV,Logan County,US,610
+25608,STANDARD,Baisden,WV,Mingo County,US,420
+25611,PO BOX,Bruno,WV,Logan County,US,448
+25612,STANDARD,Chauncey,WV,Logan County,US,97
+25614,STANDARD,Cora,WV,Logan County,US,220
+25617,STANDARD,Davin,WV,Logan County,US,590
+25621,STANDARD,Gilbert,WV,Mingo County,US,1660
+25624,PO BOX,Henlawson,WV,Logan County,US,368
+25625,STANDARD,Holden,WV,Logan County,US,990
+25628,PO BOX,Kistler,WV,Logan County,US,418
+25630,PO BOX,Lorado,WV,Logan County,US,499
+25632,STANDARD,Lyburn,WV,Logan County,US,320
+25634,PO BOX,Mallory,WV,Logan County,US,631
+25635,STANDARD,Man,WV,Logan County,US,1390
+25637,PO BOX,Mount Gay,WV,Logan County,US,1055
+25638,STANDARD,Omar,WV,Logan County,US,680
+25639,PO BOX,Peach Creek,WV,Logan County,US,560
+25644,PO BOX,Sarah Ann,WV,Logan County,US,256
+25646,PO BOX,Stollings,WV,Logan County,US,951
+25647,PO BOX,Switzer,WV,Logan County,US,672
+25649,PO BOX,Verdunville,WV,Logan County,US,1075
+25650,STANDARD,Verner,WV,Mingo County,US,240
+25651,STANDARD,Wharncliffe,WV,Mingo County,US,490
+25652,PO BOX,Whitman,WV,Logan County,US,958
+25653,PO BOX,Wilkinson,WV,Logan County,US,364
+25654,STANDARD,Yolyn,WV,Logan County,US,81
+25661,STANDARD,Williamson,WV,Mingo County,US,3870
+25665,PO BOX,Borderland,WV,Mingo County,US,152
+25666,STANDARD,Breeden,WV,Mingo County,US,190
+25667,PO BOX,Chattaroy,WV,Mingo County,US,507
+25669,STANDARD,Crum,WV,Wayne County,US,660
+25670,STANDARD,Delbarton,WV,Mingo County,US,3390
+25671,STANDARD,Dingess,WV,Mingo County,US,830
+25672,STANDARD,Edgarton,WV,Mingo County,US,266
+25674,STANDARD,Kermit,WV,Mingo County,US,1840
+25676,STANDARD,Lenore,WV,Mingo County,US,1090
+25678,STANDARD,Matewan,WV,Mingo County,US,1290
+25685,PO BOX,Naugatuck,WV,Mingo County,US,404
+25686,PO BOX,Newtown,WV,Mingo County,US,218
+25688,PO BOX,North Matewan,WV,Mingo County,US,353
+25690,PO BOX,Ragland,WV,Mingo County,US,350
+25691,PO BOX,Rawl,WV,Mingo County,US,208
+25692,PO BOX,Red Jacket,WV,Mingo County,US,413
+25696,PO BOX,Varney,WV,Mingo County,US,593
+25699,STANDARD,Wilsondale,WV,Wayne County,US,135
+25701,STANDARD,Huntington,WV,Cabell County,US,15950
+25702,STANDARD,Huntington,WV,Cabell County,US,5010
+25703,STANDARD,Huntington,WV,Cabell County,US,2160
+25704,STANDARD,Huntington,WV,Wayne County,US,11750
+25705,STANDARD,Huntington,WV,Cabell County,US,16550
+25706,PO BOX,Huntington,WV,Cabell County,US,41
+25707,PO BOX,Huntington,WV,Cabell County,US,18
+25708,PO BOX,Huntington,WV,Cabell County,US,0
+25709,PO BOX,Huntington,WV,Cabell County,US,0
+25710,PO BOX,Huntington,WV,Cabell County,US,0
+25711,PO BOX,Huntington,WV,Cabell County,US,31
+25712,PO BOX,Huntington,WV,Cabell County,US,49
+25713,PO BOX,Huntington,WV,Cabell County,US,59
+25714,PO BOX,Huntington,WV,Cabell County,US,28
+25715,PO BOX,Huntington,WV,Cabell County,US,0
+25716,PO BOX,Huntington,WV,Cabell County,US,33
+25717,PO BOX,Huntington,WV,Cabell County,US,0
+25718,PO BOX,Huntington,WV,Cabell County,US,0
+25719,PO BOX,Huntington,WV,Cabell County,US,0
+25720,PO BOX,Huntington,WV,Cabell County,US,22
+25721,PO BOX,Huntington,WV,Cabell County,US,37
+25722,PO BOX,Huntington,WV,Cabell County,US,0
+25723,PO BOX,Huntington,WV,Cabell County,US,0
+25724,PO BOX,Huntington,WV,Cabell County,US,0
+25725,PO BOX,Huntington,WV,Cabell County,US,0
+25726,PO BOX,Huntington,WV,Cabell County,US,0
+25727,PO BOX,Huntington,WV,Cabell County,US,0
+25728,PO BOX,Huntington,WV,Cabell County,US,0
+25729,PO BOX,Huntington,WV,Cabell County,US,42
+25755,UNIQUE,Huntington,WV,Cabell County,US,34
+25770,PO BOX,Huntington,WV,Cabell County,US,0
+25771,PO BOX,Huntington,WV,Cabell County,US,0
+25772,PO BOX,Huntington,WV,Cabell County,US,25
+25773,PO BOX,Huntington,WV,Cabell County,US,21
+25774,PO BOX,Huntington,WV,Cabell County,US,33
+25775,PO BOX,Huntington,WV,Cabell County,US,29
+25776,PO BOX,Huntington,WV,Cabell County,US,25
+25777,PO BOX,Huntington,WV,Cabell County,US,31
+25778,PO BOX,Huntington,WV,Cabell County,US,14
+25779,PO BOX,Huntington,WV,Cabell County,US,0
+25801,STANDARD,Beckley,WV,Raleigh County,US,22820
+25802,PO BOX,Beckley,WV,Raleigh County,US,1372
+25810,PO BOX,Allen Junction,WV,Wyoming County,US,142
+25811,STANDARD,Amigo,WV,Wyoming County,US,107
+25812,STANDARD,Ansted,WV,Fayette County,US,1290
+25813,STANDARD,Beaver,WV,Raleigh County,US,4220
+25817,STANDARD,Bolt,WV,Raleigh County,US,580
+25818,PO BOX,Bradley,WV,Raleigh County,US,1157
+25820,STANDARD,Camp Creek,WV,Mercer County,US,360
+25823,STANDARD,Coal City,WV,Raleigh County,US,1510
+25825,STANDARD,Cool Ridge,WV,Raleigh County,US,1900
+25826,PO BOX,Corinne,WV,Wyoming County,US,250
+25827,STANDARD,Crab Orchard,WV,Raleigh County,US,2340
+25831,STANDARD,Danese,WV,Fayette County,US,1020
+25832,STANDARD,Daniels,WV,Raleigh County,US,4180
+25833,PO BOX,Dothan,WV,Fayette County,US,0
+25836,PO BOX,Eccles,WV,Raleigh County,US,413
+25837,STANDARD,Edmond,WV,Fayette County,US,260
+25839,STANDARD,Fairdale,WV,Raleigh County,US,1110
+25840,STANDARD,Fayetteville,WV,Fayette County,US,6350
+25841,STANDARD,Flat Top,WV,Mercer County,US,460
+25843,STANDARD,Ghent,WV,Raleigh County,US,890
+25844,STANDARD,Glen Daniel,WV,Raleigh County,US,1010
+25845,STANDARD,Glen Fork,WV,Wyoming County,US,470
+25846,STANDARD,Glen Jean,WV,Fayette County,US,280
+25848,STANDARD,Glen Rogers,WV,Wyoming County,US,213
+25849,STANDARD,Glen White,WV,Raleigh County,US,227
+25851,PO BOX,Harper,WV,Raleigh County,US,367
+25853,PO BOX,Helen,WV,Raleigh County,US,153
+25854,STANDARD,Hico,WV,Fayette County,US,900
+25855,STANDARD,Hilltop,WV,Fayette County,US,415
+25857,STANDARD,Josephine,WV,Raleigh County,US,155
+25860,PO BOX,Lanark,WV,Raleigh County,US,229
+25862,STANDARD,Lansing,WV,Fayette County,US,220
+25864,STANDARD,Layland,WV,Fayette County,US,230
+25865,STANDARD,Lester,WV,Raleigh County,US,1020
+25866,PO BOX,Lochgelly,WV,Fayette County,US,243
+25868,STANDARD,Lookout,WV,Fayette County,US,510
+25870,STANDARD,Maben,WV,Wyoming County,US,187
+25871,PO BOX,Mabscott,WV,Raleigh County,US,870
+25873,PO BOX,Mac Arthur,WV,Raleigh County,US,917
+25875,PO BOX,Mc Graws,WV,Wyoming County,US,251
+25876,STANDARD,Saulsville,WV,Wyoming County,US,27
+25878,PO BOX,Midway,WV,Raleigh County,US,678
+25879,PO BOX,Minden,WV,Fayette County,US,336
+25880,STANDARD,Mount Hope,WV,Raleigh County,US,4200
+25882,STANDARD,Mullens,WV,Wyoming County,US,1500
+25888,UNIQUE,Mount Hope,WV,,US,0
+25901,STANDARD,Oak Hill,WV,Fayette County,US,8400
+25902,STANDARD,Odd,WV,Raleigh County,US,280
+25904,PO BOX,Pax,WV,Fayette County,US,439
+25906,PO BOX,Piney View,WV,Raleigh County,US,436
+25907,PO BOX,Prince,WV,Fayette County,US,88
+25908,STANDARD,Princewick,WV,Raleigh County,US,230
+25909,PO BOX,Prosperity,WV,Raleigh County,US,745
+25911,PO BOX,Raleigh,WV,Raleigh County,US,222
+25913,STANDARD,Ravencliff,WV,Wyoming County,US,250
+25915,STANDARD,Rhodell,WV,Raleigh County,US,269
+25916,PO BOX,Sabine,WV,Wyoming County,US,119
+25917,STANDARD,Scarbro,WV,Fayette County,US,1450
+25918,STANDARD,Shady Spring,WV,Raleigh County,US,3650
+25919,PO BOX,Skelton,WV,Raleigh County,US,177
+25920,STANDARD,Slab Fork,WV,Raleigh County,US,175
+25921,PO BOX,Sophia,WV,Raleigh County,US,1871
+25922,STANDARD,Spanishburg,WV,Mercer County,US,390
+25926,STANDARD,Beckley,WV,Raleigh County,US,0
+25927,PO BOX,Stanaford,WV,Raleigh County,US,360
+25928,STANDARD,Stephenson,WV,Wyoming County,US,280
+25932,STANDARD,Surveyor,WV,Raleigh County,US,300
+25936,STANDARD,Thurmond,WV,Fayette County,US,26
+25938,STANDARD,Victor,WV,Fayette County,US,1010
+25942,PO BOX,Winona,WV,Fayette County,US,181
+25943,PO BOX,Wyco,WV,Wyoming County,US,84
+25951,STANDARD,Hinton,WV,Summers County,US,3690
+25958,STANDARD,Charmco,WV,Greenbrier County,US,540
+25962,STANDARD,Rainelle,WV,Greenbrier County,US,2420
+25965,STANDARD,Elton,WV,Summers County,US,0
+25966,PO BOX,Green Sulphur Springs,WV,Summers County,US,109
+25969,STANDARD,Jumping Branch,WV,Summers County,US,880
+25971,STANDARD,Lerona,WV,Mercer County,US,910
+25972,PO BOX,Leslie,WV,Greenbrier County,US,156
+25976,STANDARD,Meadow Bridge,WV,Fayette County,US,1680
+25977,STANDARD,Meadow Creek,WV,Summers County,US,68
+25978,STANDARD,Nimitz,WV,Summers County,US,530
+25979,STANDARD,Pipestem,WV,Summers County,US,730
+25981,STANDARD,Quinwood,WV,Greenbrier County,US,550
+25984,STANDARD,Rupert,WV,Greenbrier County,US,1340
+25985,STANDARD,Sandstone,WV,Summers County,US,350
+25986,PO BOX,Spring Dale,WV,Fayette County,US,133
+25989,STANDARD,White Oak,WV,Raleigh County,US,340
+26003,STANDARD,Wheeling,WV,Ohio County,US,34290
+26030,PO BOX,Beech Bottom,WV,Brooke County,US,568
+26031,STANDARD,Benwood,WV,Marshall County,US,1510
+26032,STANDARD,Bethany,WV,Brooke County,US,540
+26033,STANDARD,Cameron,WV,Marshall County,US,2130
+26034,STANDARD,Chester,WV,Hancock County,US,3660
+26035,STANDARD,Colliers,WV,Brooke County,US,2120
+26036,STANDARD,Dallas,WV,Marshall County,US,410
+26037,STANDARD,Follansbee,WV,Brooke County,US,5460
+26038,STANDARD,Glen Dale,WV,Marshall County,US,2590
+26039,STANDARD,Glen Easton,WV,Marshall County,US,780
+26040,STANDARD,Mcmechen,WV,Marshall County,US,1490
+26041,STANDARD,Moundsville,WV,Marshall County,US,12460
+26047,STANDARD,New Cumberland,WV,Hancock County,US,4990
+26050,STANDARD,Newell,WV,Hancock County,US,1110
+26055,STANDARD,Proctor,WV,Marshall County,US,1450
+26056,PO BOX,New Manchester,WV,Hancock County,US,520
+26058,PO BOX,Short Creek,WV,Brooke County,US,84
+26059,STANDARD,Triadelphia,WV,Ohio County,US,2890
+26060,STANDARD,Valley Grove,WV,Ohio County,US,1480
+26062,STANDARD,Weirton,WV,Hancock County,US,17860
+26070,STANDARD,Wellsburg,WV,Brooke County,US,6980
+26074,PO BOX,West Liberty,WV,Ohio County,US,200
+26075,PO BOX,Windsor Heights,WV,Brooke County,US,367
+26101,STANDARD,Parkersburg,WV,Wood County,US,22010
+26102,PO BOX,Parkersburg,WV,Wood County,US,636
+26103,PO BOX,Parkersburg,WV,Wood County,US,370
+26104,STANDARD,Parkersburg,WV,Wood County,US,13520
+26105,STANDARD,Vienna,WV,Wood County,US,10620
+26106,UNIQUE,Parkersburg,WV,Wood County,US,0
+26120,UNIQUE,Mineral Wells,WV,Wood County,US,0
+26121,UNIQUE,Mineral Wells,WV,Wood County,US,0
+26133,STANDARD,Belleville,WV,Wood County,US,1220
+26134,STANDARD,Belmont,WV,Pleasants County,US,710
+26136,STANDARD,Big Bend,WV,Calhoun County,US,400
+26137,STANDARD,Big Springs,WV,Calhoun County,US,600
+26138,STANDARD,Brohard,WV,Wirt County,US,141
+26141,STANDARD,Creston,WV,Wirt County,US,330
+26142,STANDARD,Davisville,WV,Wood County,US,2210
+26143,STANDARD,Elizabeth,WV,Wirt County,US,3570
+26146,STANDARD,Friendly,WV,Tyler County,US,940
+26147,STANDARD,Grantsville,WV,Calhoun County,US,1410
+26148,STANDARD,Macfarlan,WV,Ritchie County,US,164
+26149,STANDARD,Middlebourne,WV,Tyler County,US,1940
+26150,STANDARD,Mineral Wells,WV,Wood County,US,5340
+26151,STANDARD,Mount Zion,WV,Calhoun County,US,350
+26152,STANDARD,Munday,WV,Calhoun County,US,54
+26155,STANDARD,New Martinsville,WV,Wetzel County,US,6860
+26159,STANDARD,Paden City,WV,Wetzel County,US,2070
+26160,STANDARD,Palestine,WV,Wirt County,US,760
+26161,STANDARD,Petroleum,WV,Ritchie County,US,320
+26162,STANDARD,Porters Falls,WV,Wetzel County,US,101
+26164,STANDARD,Ravenswood,WV,Jackson County,US,6430
+26167,STANDARD,Reader,WV,Wetzel County,US,700
+26169,STANDARD,Rockport,WV,Wood County,US,680
+26170,STANDARD,Saint Marys,WV,Pleasants County,US,4940
+26175,STANDARD,Sistersville,WV,Tyler County,US,2610
+26178,STANDARD,Smithville,WV,Ritchie County,US,410
+26180,STANDARD,Walker,WV,Wood County,US,1860
+26181,STANDARD,Washington,WV,Wood County,US,5630
+26184,STANDARD,Waverly,WV,Wood County,US,1880
+26187,STANDARD,Williamstown,WV,Wood County,US,5710
+26201,STANDARD,Buckhannon,WV,Upshur County,US,15180
+26202,STANDARD,Fenwick,WV,Nicholas County,US,450
+26203,STANDARD,Erbacon,WV,Webster County,US,226
+26205,STANDARD,Craigsville,WV,Nicholas County,US,2600
+26206,STANDARD,Cowen,WV,Webster County,US,1960
+26208,STANDARD,Camden On Gauley,WV,Webster County,US,560
+26209,PO BOX,Snowshoe,WV,Pocahontas County,US,224
+26210,STANDARD,Adrian,WV,Upshur County,US,187
+26215,STANDARD,Cleveland,WV,Webster County,US,93
+26217,STANDARD,Diana,WV,Webster County,US,220
+26218,STANDARD,French Creek,WV,Upshur County,US,2180
+26219,PO BOX,Frenchton,WV,Upshur County,US,0
+26222,STANDARD,Hacker Valley,WV,Webster County,US,390
+26224,STANDARD,Helvetia,WV,Randolph County,US,139
+26228,STANDARD,Kanawha Head,WV,Upshur County,US,52
+26229,PO BOX,Lorentz,WV,Upshur County,US,0
+26230,STANDARD,Pickens,WV,Randolph County,US,94
+26234,STANDARD,Rock Cave,WV,Upshur County,US,870
+26236,STANDARD,Selbyville,WV,Randolph County,US,58
+26237,STANDARD,Tallmansville,WV,Upshur County,US,460
+26238,STANDARD,Volga,WV,Barbour County,US,670
+26241,STANDARD,Elkins,WV,Randolph County,US,11380
+26250,STANDARD,Belington,WV,Barbour County,US,4370
+26253,STANDARD,Beverly,WV,Randolph County,US,2770
+26254,STANDARD,Bowden,WV,Randolph County,US,300
+26257,STANDARD,Coalton,WV,Randolph County,US,840
+26259,PO BOX,Dailey,WV,Randolph County,US,324
+26260,STANDARD,Davis,WV,Tucker County,US,1040
+26261,STANDARD,Richwood,WV,Nicholas County,US,1450
+26263,STANDARD,Dryfork,WV,Tucker County,US,360
+26264,STANDARD,Durbin,WV,Pocahontas County,US,520
+26266,STANDARD,Upperglade,WV,Webster County,US,220
+26267,STANDARD,Ellamore,WV,Upshur County,US,460
+26268,STANDARD,Glady,WV,Randolph County,US,29
+26269,STANDARD,Hambleton,WV,Tucker County,US,770
+26270,STANDARD,Harman,WV,Randolph County,US,580
+26271,STANDARD,Hendricks,WV,Tucker County,US,250
+26273,STANDARD,Huttonsville,WV,Randolph County,US,700
+26275,PO BOX,Junior,WV,Barbour County,US,587
+26276,STANDARD,Kerens,WV,Randolph County,US,380
+26278,STANDARD,Mabie,WV,Randolph County,US,480
+26280,STANDARD,Mill Creek,WV,Randolph County,US,1490
+26282,STANDARD,Monterville,WV,Randolph County,US,89
+26283,STANDARD,Montrose,WV,Randolph County,US,1330
+26285,STANDARD,Norton,WV,Randolph County,US,260
+26287,STANDARD,Parsons,WV,Tucker County,US,2630
+26288,STANDARD,Webster Springs,WV,Webster County,US,2170
+26289,STANDARD,Red Creek,WV,Tucker County,US,70
+26291,STANDARD,Slatyfork,WV,Pocahontas County,US,260
+26292,STANDARD,Thomas,WV,Tucker County,US,660
+26293,STANDARD,Valley Bend,WV,Randolph County,US,590
+26294,STANDARD,Valley Head,WV,Randolph County,US,500
+26296,PO BOX,Whitmer,WV,Randolph County,US,132
+26298,STANDARD,Bergoo,WV,Webster County,US,89
+26301,STANDARD,Clarksburg,WV,Harrison County,US,22630
+26302,PO BOX,Clarksburg,WV,Harrison County,US,1291
+26306,UNIQUE,Clarksburg,WV,Harrison County,US,0
+26320,STANDARD,Alma,WV,Tyler County,US,600
+26321,STANDARD,Alum Bridge,WV,Lewis County,US,280
+26323,PO BOX,Anmoore,WV,Harrison County,US,726
+26325,STANDARD,Auburn,WV,Ritchie County,US,227
+26327,STANDARD,Berea,WV,Ritchie County,US,39
+26330,STANDARD,Bridgeport,WV,Harrison County,US,14940
+26335,STANDARD,Burnsville,WV,Braxton County,US,940
+26337,STANDARD,Cairo,WV,Ritchie County,US,920
+26338,STANDARD,Camden,WV,Lewis County,US,550
+26339,STANDARD,Center Point,WV,Doddridge County,US,142
+26342,STANDARD,Coxs Mills,WV,Gilmer County,US,390
+26343,STANDARD,Crawford,WV,Upshur County,US,450
+26346,STANDARD,Ellenboro,WV,Ritchie County,US,700
+26347,STANDARD,Flemington,WV,Taylor County,US,1910
+26348,STANDARD,Folsom,WV,Wetzel County,US,220
+26349,PO BOX,Galloway,WV,Barbour County,US,130
+26351,STANDARD,Glenville,WV,Gilmer County,US,2230
+26354,STANDARD,Grafton,WV,Taylor County,US,8290
+26361,PO BOX,Gypsy,WV,Harrison County,US,373
+26362,STANDARD,Harrisville,WV,Ritchie County,US,2540
+26366,PO BOX,Haywood,WV,Harrison County,US,150
+26369,PO BOX,Hepzibah,WV,Harrison County,US,527
+26372,STANDARD,Horner,WV,Lewis County,US,670
+26374,STANDARD,Independence,WV,Preston County,US,1220
+26376,STANDARD,Ireland,WV,Braxton County,US,330
+26377,STANDARD,Jacksonburg,WV,Wetzel County,US,490
+26378,STANDARD,Jane Lew,WV,Lewis County,US,3800
+26384,STANDARD,Linn,WV,Gilmer County,US,320
+26385,STANDARD,Lost Creek,WV,Harrison County,US,3210
+26386,STANDARD,Lumberport,WV,Harrison County,US,2000
+26404,STANDARD,Meadowbrook,WV,Harrison County,US,310
+26405,STANDARD,Moatsville,WV,Barbour County,US,1020
+26408,STANDARD,Mount Clare,WV,Harrison County,US,2640
+26410,STANDARD,Newburg,WV,Preston County,US,800
+26411,STANDARD,New Milton,WV,Doddridge County,US,500
+26412,STANDARD,Orlando,WV,Lewis County,US,380
+26415,STANDARD,Pennsboro,WV,Ritchie County,US,2640
+26416,STANDARD,Philippi,WV,Barbour County,US,5610
+26419,STANDARD,Pine Grove,WV,Wetzel County,US,810
+26421,STANDARD,Pullman,WV,Ritchie County,US,250
+26422,PO BOX,Reynoldsville,WV,Harrison County,US,377
+26424,PO BOX,Rosemont,WV,Taylor County,US,282
+26425,STANDARD,Rowlesburg,WV,Preston County,US,780
+26426,STANDARD,Salem,WV,Harrison County,US,5220
+26430,STANDARD,Sand Fork,WV,Gilmer County,US,340
+26431,STANDARD,Shinnston,WV,Harrison County,US,5180
+26434,PO BOX,Shirley,WV,Tyler County,US,67
+26435,PO BOX,Simpson,WV,Taylor County,US,203
+26436,PO BOX,Smithburg,WV,Doddridge County,US,162
+26437,STANDARD,Smithfield,WV,Wetzel County,US,330
+26438,PO BOX,Spelter,WV,Harrison County,US,295
+26440,STANDARD,Thornton,WV,Taylor County,US,1040
+26443,STANDARD,Troy,WV,Gilmer County,US,197
+26444,STANDARD,Tunnelton,WV,Preston County,US,2550
+26447,STANDARD,Walkersville,WV,Lewis County,US,980
+26448,STANDARD,Wallace,WV,Harrison County,US,940
+26451,STANDARD,West Milford,WV,Harrison County,US,650
+26452,STANDARD,Weston,WV,Lewis County,US,7900
+26456,STANDARD,West Union,WV,Doddridge County,US,2740
+26461,STANDARD,Wilsonburg,WV,Harrison County,US,0
+26463,PO BOX,Wyatt,WV,Harrison County,US,152
+26501,STANDARD,Morgantown,WV,Monongalia County,US,15130
+26502,PO BOX,Morgantown,WV,Monongalia County,US,229
+26504,PO BOX,Morgantown,WV,Monongalia County,US,337
+26505,STANDARD,Morgantown,WV,Monongalia County,US,18930
+26506,STANDARD,Morgantown,WV,Monongalia County,US,28
+26507,PO BOX,Morgantown,WV,Monongalia County,US,704
+26508,STANDARD,Morgantown,WV,Monongalia County,US,31730
+26519,STANDARD,Albright,WV,Preston County,US,1470
+26520,PO BOX,Arthurdale,WV,Preston County,US,812
+26521,STANDARD,Blacksville,WV,Monongalia County,US,410
+26524,STANDARD,Bretz,WV,Preston County,US,129
+26525,STANDARD,Bruceton Mills,WV,Preston County,US,4940
+26527,PO BOX,Cassville,WV,Monongalia County,US,193
+26531,PO BOX,Dellslow,WV,Monongalia County,US,1099
+26534,PO BOX,Granville,WV,Monongalia County,US,938
+26537,STANDARD,Kingwood,WV,Preston County,US,4800
+26541,STANDARD,Maidsville,WV,Monongalia County,US,3040
+26542,STANDARD,Masontown,WV,Preston County,US,2110
+26543,STANDARD,Osage,WV,Monongalia County,US,154
+26544,PO BOX,Pentress,WV,Monongalia County,US,247
+26546,STANDARD,Pursglove,WV,Monongalia County,US,500
+26547,STANDARD,Reedsville,WV,Preston County,US,2510
+26554,STANDARD,Fairmont,WV,Marion County,US,34480
+26555,PO BOX,Fairmont,WV,Marion County,US,1076
+26559,PO BOX,Barrackville,WV,Marion County,US,1341
+26560,STANDARD,Baxter,WV,Marion County,US,129
+26561,STANDARD,Big Run,WV,Wetzel County,US,0
+26562,STANDARD,Burton,WV,Wetzel County,US,500
+26563,PO BOX,Carolina,WV,Marion County,US,340
+26566,PO BOX,Colfax,WV,Marion County,US,96
+26568,STANDARD,Enterprise,WV,Harrison County,US,410
+26570,STANDARD,Fairview,WV,Monongalia County,US,2700
+26571,STANDARD,Farmington,WV,Marion County,US,1780
+26572,PO BOX,Four States,WV,Marion County,US,183
+26574,PO BOX,Grant Town,WV,Marion County,US,423
+26575,STANDARD,Hundred,WV,Wetzel County,US,650
+26576,PO BOX,Idamay,WV,Marion County,US,437
+26578,PO BOX,Kingmont,WV,Marion County,US,259
+26581,STANDARD,Littleton,WV,Wetzel County,US,690
+26582,STANDARD,Mannington,WV,Marion County,US,4050
+26585,STANDARD,Metz,WV,Marion County,US,400
+26586,STANDARD,Montana Mines,WV,Marion County,US,155
+26587,STANDARD,Rachel,WV,Marion County,US,280
+26588,STANDARD,Rivesville,WV,Marion County,US,2630
+26590,STANDARD,Wana,WV,Monongalia County,US,530
+26591,STANDARD,Worthington,WV,Marion County,US,1250
+26601,STANDARD,Sutton,WV,Braxton County,US,3140
+26610,STANDARD,Birch River,WV,Nicholas County,US,850
+26611,STANDARD,Cedarville,WV,Gilmer County,US,239
+26615,STANDARD,Copen,WV,Braxton County,US,101
+26617,STANDARD,Dille,WV,Clay County,US,171
+26619,STANDARD,Exchange,WV,Braxton County,US,420
+26621,STANDARD,Flatwoods,WV,Braxton County,US,660
+26623,STANDARD,Frametown,WV,Braxton County,US,1050
+26624,STANDARD,Gassaway,WV,Braxton County,US,1960
+26627,STANDARD,Heaters,WV,Braxton County,US,360
+26629,STANDARD,Little Birch,WV,Braxton County,US,350
+26631,STANDARD,Napier,WV,Braxton County,US,170
+26636,STANDARD,Rosedale,WV,Braxton County,US,390
+26638,STANDARD,Shock,WV,Gilmer County,US,133
+26651,STANDARD,Summersville,WV,Nicholas County,US,7230
+26656,STANDARD,Belva,WV,Nicholas County,US,280
+26660,STANDARD,Calvin,WV,Nicholas County,US,260
+26662,STANDARD,Canvas,WV,Nicholas County,US,830
+26667,PO BOX,Drennen,WV,Nicholas County,US,184
+26671,PO BOX,Gilboa,WV,Nicholas County,US,219
+26675,PO BOX,Keslers Cross Lanes,WV,Nicholas County,US,103
+26676,STANDARD,Leivasy,WV,Nicholas County,US,350
+26678,STANDARD,Mount Lookout,WV,Nicholas County,US,1030
+26679,STANDARD,Mount Nebo,WV,Nicholas County,US,1540
+26680,STANDARD,Nallen,WV,Fayette County,US,250
+26681,STANDARD,Nettie,WV,Nicholas County,US,1360
+26684,STANDARD,Pool,WV,Nicholas County,US,85
+26690,STANDARD,Swiss,WV,Fayette County,US,280
+26691,STANDARD,Tioga,WV,Nicholas County,US,310
+26704,STANDARD,Augusta,WV,Hampshire County,US,4520
+26705,STANDARD,Aurora,WV,Preston County,US,900
+26707,PO BOX,Bayard,WV,Grant County,US,282
+26710,STANDARD,Burlington,WV,Mineral County,US,1670
+26711,STANDARD,Capon Bridge,WV,Hampshire County,US,2300
+26714,STANDARD,Delray,WV,Hampshire County,US,340
+26716,STANDARD,Eglon,WV,Preston County,US,540
+26717,STANDARD,Elk Garden,WV,Mineral County,US,870
+26719,STANDARD,Fort Ashby,WV,Mineral County,US,2550
+26720,STANDARD,Gormania,WV,Grant County,US,184
+26722,STANDARD,Green Spring,WV,Hampshire County,US,480
+26726,STANDARD,Keyser,WV,Mineral County,US,10840
+26731,STANDARD,Lahmansville,WV,Grant County,US,300
+26739,STANDARD,Mount Storm,WV,Grant County,US,660
+26743,STANDARD,New Creek,WV,Mineral County,US,1430
+26750,STANDARD,Piedmont,WV,Mineral County,US,570
+26753,STANDARD,Ridgeley,WV,Mineral County,US,5480
+26755,STANDARD,Rio,WV,Hardy County,US,540
+26757,STANDARD,Romney,WV,Hampshire County,US,4960
+26761,STANDARD,Shanks,WV,Hampshire County,US,480
+26763,STANDARD,Springfield,WV,Hampshire County,US,1440
+26764,STANDARD,Terra Alta,WV,Preston County,US,3430
+26767,STANDARD,Wiley Ford,WV,Mineral County,US,580
+26801,STANDARD,Baker,WV,Hardy County,US,1130
+26802,STANDARD,Brandywine,WV,Pendleton County,US,940
+26804,STANDARD,Circleville,WV,Pendleton County,US,480
+26807,STANDARD,Franklin,WV,Pendleton County,US,2390
+26808,STANDARD,High View,WV,Hampshire County,US,750
+26810,STANDARD,Lost City,WV,Hardy County,US,280
+26812,STANDARD,Mathias,WV,Hardy County,US,1430
+26814,STANDARD,Riverton,WV,Pendleton County,US,340
+26815,STANDARD,Sugar Grove,WV,Pendleton County,US,550
+26817,STANDARD,Bloomery,WV,Hampshire County,US,390
+26818,STANDARD,Fisher,WV,Hardy County,US,740
+26823,PO BOX,Capon Springs,WV,Hampshire County,US,101
+26833,STANDARD,Maysville,WV,Grant County,US,1920
+26836,STANDARD,Moorefield,WV,Hardy County,US,5560
+26838,STANDARD,Milam,WV,Hardy County,US,26
+26845,STANDARD,Old Fields,WV,Hardy County,US,770
+26847,STANDARD,Petersburg,WV,Grant County,US,5300
+26851,STANDARD,Wardensville,WV,Hardy County,US,1690
+26852,STANDARD,Purgitsville,WV,Hampshire County,US,670
+26855,STANDARD,Cabins,WV,Grant County,US,610
+26865,STANDARD,Yellow Spring,WV,Hampshire County,US,430
+26866,STANDARD,Upper Tract,WV,Pendleton County,US,680
+26884,STANDARD,Seneca Rocks,WV,Pendleton County,US,470
+26886,PO BOX,Onego,WV,Pendleton County,US,110

@@ -116,7 +116,7 @@ extract_google_geocode = function(url, input, address, latitude, longitude) {
     write_to_log("Logs/google_geocode.txt", str_trunc(str_c("Pulling: ", address), 40, "right"))
   }
 
-  Sys.sleep(3)
+  Sys.sleep(2)
 
   address_components = geocode_address_components(resp)
 
@@ -233,17 +233,27 @@ info_geo = info |>
   mutate(input = "geo", address = NA_character_) |>
   select(url, input, address, latitude, longitude)
 
+# I would like to replace all of this with custom API calls with httr2 vs the googleways package
 info_google = union(info_address, info_geo) |>
   pmap(safely(extract_google_geocode), .progress = TRUE)
 
-# Safely stuff goes here
+info_google_error = info_google |> # Not currently used
+  list_transpose() |>
+  pluck("error") |>
+  discard(is.null) |>
+  map(pluck("message")) |>
+  unlist()
 
-info_full = info_google |>
-  left_join(info |> select(-address))
+info_google_result = info_google |>
+  list_transpose() |>
+  pluck("result") |>
+  list_rbind() |>
+  left_join(info |> select(-address), join_by(url)) |>
+  select(name, description, phone, email, website, street, city, county, state, zip, latitude, longitude, url, last_modified)
 
 # Save Results ----
 companies = history |>
-  anti_join(info_full, join_by(url)) |>
+  anti_join(info_google_result, join_by(url)) |>
   union(info_full)
 
 write_rds(companies, "Pipeline/companies.rds")

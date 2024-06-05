@@ -133,7 +133,7 @@ companies_all = google_details |>
 
 # Export ----
 write_rds(companies_all, "Pipeline/companies.rds")
-write_csv(companies_all, "Output/companies.csv")
+write_csv(companies_all, "Output/companies.csv", na = "")
 
 write_rds(categories, "Pipeline/categories.rds")
-write_csv(categories, "Output/categories.csv")
+write_csv(categories, "Output/categories.csv", na = "")

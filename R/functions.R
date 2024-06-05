@@ -89,10 +89,8 @@ get_google_details = function(search_text) {
         "places.websiteUri",
         "places.regularOpeningHours",
         "places.displayName",
-        "places.primaryTypeDisplayName",
         "places.paymentOptions",
         "places.accessibilityOptions",
-        "places.generativeSummary",
         sep = ",")) |>
     req_body_json(list(textQuery = search_text))
 }
@@ -116,22 +114,26 @@ extract_google_details = function(url_wvtourism, resp) {
     url_company = base |> pluck("places_websiteUri"),
     is_wheelchair_accessible = base |> pluck("places_accessibilityOptions", "wheelchairAccessibleParking"))
 
-  payment = base |>
-    pluck("places_paymentOptions") |>
-    list_transpose() |>
-    as_tibble_col() |>
-    unnest_wider(value) |>
-    clean_names()
+  if (!is_null(base |> pluck("places_paymentOptions"))) {
+    payment = base |>
+      pluck("places_paymentOptions") |>
+      list_transpose() |>
+      as_tibble_col() |>
+      unnest_wider(value) |>
+      clean_names()
+  }
 
-  hours = base |>
-    pluck("places_regularOpeningHours", "weekdayDescriptions") |>
-    as_tibble_col("hours") |>
-    unnest(hours) |>
-    mutate(
-      day = str_extract(hours, "[:alpha:]*"),
-      hours = str_extract(hours, "\\d.*")) |>
-    pivot_wider(names_from = day, names_prefix = "hours_", values_from = hours) |>
-    clean_names()
+  if (!is_null(base |> pluck("places_regularOpeningHours", "weekdayDescriptions"))) {
+    hours = base |>
+      pluck("places_regularOpeningHours", "weekdayDescriptions") |>
+      as_tibble_col("hours") |>
+      unnest(hours) |>
+      mutate(
+        day = str_extract(hours, "[:alpha:]*"),
+        hours = str_extract(hours, "\\d.*")) |>
+      pivot_wider(names_from = day, names_prefix = "hours_", values_from = hours) |>
+      clean_names()
+  }
 
   data_all = data |>
     bind_cols(payment) |>
@@ -139,6 +141,27 @@ extract_google_details = function(url_wvtourism, resp) {
     mutate(url_wvtourism)
 
   return(data_all)
+}
+
+extract_company_info = function(resp) {
+  # Read Page
+  page = resp_body_html(resp)
+
+  # Extract data
+  description = page |> html_element(".desc") |> html_text2() |> str_replace_all("\n", " ") |> str_replace_all("  ", " ")
+  website = page |> html_element(".meta_block--website a") |> html_attr("href")
+  phone = page |> html_element('span[itemprop="telephone"]') |> html_text2()
+  url_company = page |> html_element('a[itemprop="email"]') |> html_text2()
+
+  # Return tibble
+  data = tibble(
+    url_wvtourism = resp_url(resp),
+    description = description,
+    website = website,
+    phone = phone,
+    url_company = url_company)
+
+  return(data)
 }
 
 # Tidy ----
@@ -180,4 +203,29 @@ extract_before_last_comma = function(address_clean) {
   }, error = function(e) {
     return(address_clean)
   })
+}
+
+pull_company_from_url = function(url_wvtourism) {
+  location_tibble = url_wvtourism |>
+    str_locate_all("/") |>
+    as_tibble_col() |>
+    unnest("value") |>
+    slice_tail(n = 2)
+
+  last_index = location_tibble |>
+    slice_tail(n = 1) |>
+    pluck(1) |>
+    pluck(1)
+
+  second_last_index = location_tibble |>
+    slice_head(n = 1) |>
+    pluck(1) |>
+    pluck(1)
+
+  company = url_wvtourism |> str_sub(second_last_index, last_index) |>
+    str_replace_all("-", " ") |>
+    str_remove_all("/") |>
+    str_to_title()
+
+  return(company)
 }

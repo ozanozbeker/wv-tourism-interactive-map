@@ -1,3 +1,5 @@
+library(tidyverse)
+
 # Travel Regions ----
 travel_regions = tribble(
   ~region,                         ~county,

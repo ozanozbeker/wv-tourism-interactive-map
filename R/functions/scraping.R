@@ -1,8 +1,11 @@
-# httr2 ----
-get_request = function(url) {
-  require(httr2)
+require(tidyverse)
+require(janitor)
+require(httr2)
+require(rvest)
 
-  request(url) |>
+get_request = function(url) {
+  url |> 
+    request() |>
     req_method("GET") |>
     req_throttle(rate = 30 / 60) |> # 30 requests per minute
     req_user_agent("Ozan Ozbeker (https://github.com/ozanozbeker/wv-tourism)")

@@ -1,6 +1,61 @@
-library(tidyverse)
+# Introduction
 
-# Travel Regions ----
+This notebook rebuilds the DuckDB database & base tables from scratch. Everything not in this file is built via the scrapes later in the pipeline.
+
+# Initialize
+
+These are the core packages needed to rebuild the database. We will use other packages, but they are going to be in the relevant code-chunks to show the association.
+
+```{r}
+#| label: load-packages
+
+library(DBI)
+library(duckdb)
+library(tidyverse)
+```
+
+I'm using [DuckDB](%22https://duckdb.org/%22) for this project because flat files are annoying and DuckDB is light-weight and very easy to use.
+
+```{r}
+#| label: db-connect
+
+con = dbConnect(duckdb(), "database.duckdb")
+dbListTables(con)
+```
+
+# Tables
+
+This project uses various data sources
+
+## Zip Codes
+
+A lot of the address from the scrapes are non-standard, so this table of zip codes will help standardize the results. [zipcodeR]() makes it very easy to obtain tibbles of zip codes and relevant information, but it does use `<glob>` storage of `<raw>` values which was new for me. Shout out to [this](https://stackoverflow.com/a/77285606/26439015) Stack Overflow answer for suggesting the `jsonlite::parse_gzjson_raw()` solution.
+
+```{r}
+#| label: zip-codes
+
+library(zipcodeR)
+library(jsonlite)
+
+zip_codes = search_state("WV") |> 
+  select(zipcode, major_city, cities = common_city_list, county) |>
+  mutate(cities = map(cities, parse_gzjson_raw)) |> 
+  unnest_longer(cities) |> 
+  summarize(
+    .by = c(zipcode, major_city, county), 
+    cities = str_c(cities, collapse = "|"))
+
+dbWriteTable(con, "zip_codes", zip_codes)
+dbListTables(con)
+```
+
+## Travel Regions
+
+The WV Tourism website designated 9 different regions to the counties of WV as Travel Regions. I hate to admit it, but as these aren't **official** in anyway, I just had to make this table by hand.
+
+```{r}
+#| label: travel-regions
+
 travel_regions = tribble(
   ~region,                         ~county,
   "Eastern Panhandle",             "Berkeley County",
@@ -60,6 +115,15 @@ travel_regions = tribble(
   "Potomac Highlands",             "Tucker County"
 )
 
-# Zip Codes ----
-zips = read_csv("Data/us_zips.csv", col_types = "ccccccn") |>
-  select(-type)
+dbWriteTable(con, "travel_regions", travel_regions)
+dbListTables(con)
+```
+
+# Finalize
+Finally, we disconnect from the DB.
+
+```{r}
+#| label: db-disconnect
+
+dbDisconnect(con)
+```

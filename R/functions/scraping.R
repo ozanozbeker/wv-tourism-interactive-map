@@ -1,3 +1,14 @@
+# Exploration
+find_attributes = function(page, attribute) {
+
+  page |>
+    html_elements("*") |>
+    html_attr(attribute) |>
+    as_tibble_col("attribute") |>
+    remove_missing()
+}
+
+# Scrape
 get_request = function(url) {
   url |>
     request() |>
@@ -6,43 +17,59 @@ get_request = function(url) {
     req_user_agent("Ozan Ozbeker (https://github.com/ozanozbeker/wv-tourism-interactive-map)")
 }
 
-# Tidy ----
-extract_after_last_comma = function(address_clean) {
-  require(tidyverse)
-  require(janitor)
+pull_destination_from_url = function(url_wvtourism) {
+  location_tibble = url_wvtourism |>
+    str_locate_all("/") |>
+    as_tibble_col() |>
+    unnest("value") |>
+    slice_tail(n = 2)
 
-  last_comma = address_clean |>
-    str_locate_all(",") |>
-    as_tibble(.name_repair = make_clean_names) |>
+  last_index = location_tibble |>
     slice_tail(n = 1) |>
-    pull(1)
+    pluck(1) |>
+    pluck(1)
 
-  tryCatch({
-    text = address_clean |>
-      str_sub(last_comma[[1]] + 2, -1) |>
-      str_squish()
-    return(text)
-  }, error = function(e) {
-    return(NA_character_)
-  })
+  second_last_index = location_tibble |>
+    slice_head(n = 1) |>
+    pluck(1) |>
+    pluck(1)
+
+  company = url_wvtourism |> str_sub(second_last_index, last_index) |>
+    str_replace_all("-", " ") |>
+    str_remove_all("/") |>
+    str_to_title()
+
+  return(company)
 }
 
-extract_before_last_comma = function(address_clean) {
-  require(tidyverse)
-  require(janitor)
+get_coords = function(url_wvtourism, address) {
 
-  last_comma = address_clean |>
-    str_locate_all(",") |>
-    as_tibble(.name_repair = make_clean_names) |>
-    slice_tail(n = 1) |>
-    pull(1)
+  coords = mb_geocode(
+    search_text = address,
+    search_within = c(-82.644739, 37.201483, -77.719519, 40.638801),
+    language = "en",
+    country = "US"
+  )
 
-  tryCatch({
-    text = address_clean |>
-      str_sub(1, last_comma[[1]] - 1) |>
-      str_squish()
-    return(text)
-  }, error = function(e) {
-    return(address_clean)
-  })
+  data = tibble(
+    url_wvtourism = url_wvtourism,
+    lat = coords[[1]],
+    lon = coords[[2]]
+  )
+
+  return(data)
+}
+
+get_address = function(url_wvtourism, lat, lon) {
+
+  address = mb_reverse_geocode(
+    coordinates = c(lat, lon)
+  )
+
+  data = tibble(
+    url_wvtourism = url_wvtourism,
+    address = address
+  )
+
+  return(data)
 }

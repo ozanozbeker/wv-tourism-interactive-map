@@ -1,6 +1,6 @@
 # Introduction
 
-This notebook rebuilds the DuckDB database & base tables from scratch. Everything not in this file is built via the scrapes later in the pipeline.
+This notebook builds the DuckDB database & base tables from scratch. Everything not in this file is built via the scrapes later in the pipeline.
 
 # Initialize
 
@@ -20,7 +20,7 @@ I'm using [DuckDB](%22https://duckdb.org/%22) for this project because flat file
 #| label: db-connect
 
 con = dbConnect(duckdb(), "database.duckdb")
-dbListTables(con)
+dbListTables(con) |> as_tibble_col("tables")
 ```
 
 # Tables
@@ -29,7 +29,7 @@ This project uses various data sources
 
 ## Zip Codes
 
-A lot of the address from the scrapes are non-standard, so this table of zip codes will help standardize the results. [zipcodeR]() makes it very easy to obtain tibbles of zip codes and relevant information, but it does use `<glob>` storage of `<raw>` values which was new for me. Shout out to [this](https://stackoverflow.com/a/77285606/26439015) Stack Overflow answer for suggesting the `jsonlite::parse_gzjson_raw()` solution.
+A lot of the addresses from the scrapes are non-standard, so this table of zip codes will help standardize the results. [zipcodeR]() makes it very easy to obtain tibbles of zip codes and relevant information, but it does use `<glob>` storage of `<raw>` values which was new for me. Shout out to [this](https://stackoverflow.com/a/77285606/26439015) Stack Overflow answer for suggesting the `jsonlite::parse_gzjson_raw()` solution.
 
 ```{r}
 #| label: zip-codes

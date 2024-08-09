@@ -24,6 +24,7 @@ con = dbConnect(duckdb::duckdb(), "database.duckdb")
 ```
 
 ## Custom Functions
+
 ```{r}
 #| label: custom-functions
 

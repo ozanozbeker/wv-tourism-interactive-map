@@ -1,0 +1,245 @@
+# Scrape Cities
+
+This notebook scrapes the featured cities in the website. The cities are grouped into the Travel Regions.
+
+## Initialize
+
+Load the necessary packages as well as functions used across the project.
+
+```{r}
+#| label: initialize
+
+library(tidyverse)
+library(httr2)
+library(rvest)
+library(janitor)
+library(DBI)
+
+source("R/functions/scraping.R")
+
+con = dbConnect(duckdb::duckdb(), "database.duckdb")
+```
+
+## Travel Regions
+
+The Travel Regions page is a homepage to all of the featured cities in the website. Each of the cities are grouped within a Travel Region.
+
+```{r}
+req_home = get_request("https://wvtourism.com/places-to-go/travel-regions/")
+resp_home = req_perform(req_home)
+```
+
+Since its only one response, I'm not worried about error handling since this is an interactive notebook.
+
+Now we need to extract the links for the Travel Regions and use them to extract the Cities.
+
+```{r}
+travel_regions = resp_home |>
+  resp_body_html() |> 
+  html_element("ul.ttd") |> 
+  html_children() |> 
+  html_children() |> 
+  html_attrs() |> 
+  as_tibble_col() |> 
+  unnest_wider(value) |> 
+  select(travel_region = title, url = href)
+```
+
+## Cities
+
+Now that we have a links to all of the Travel Regions pages, we can extract the Cities from within.
+
+```{r}
+reqs_travel_regions = travel_regions |> 
+  pull(url) |> 
+  map(get_request)
+
+resps_travel_regions = reqs_travel_regions |> 
+  req_perform_sequential(on_error = "continue") |> 
+  set_names(travel_regions |> pull(travel_region))
+```
+
+{httr2} takes care of error-handling for us, so if something goes wrong with the HTTP request, it will document that and continue. Here we continue with the successes from `links_request` and trouble shoot the failures if necessary.
+
+```{r}
+resps_failures_travel_regions = resps_failures(resps_travel_regions) |> print()
+resps_successes_travel_regions = resps_successes(resps_travel_regions) |> print()
+```
+
+Now we create a custom function to extract the Cities and iterate over the pages.
+
+```{r}
+extract_cities = function(resp) {
+
+  urls = resp |> 
+    resp_body_html() |> 
+    html_element("div.wvto-featured-pages") |> 
+    html_children() |>
+    html_children() |>
+    html_children() |>
+    html_children() |> 
+    html_attrs() |> 
+    as_tibble_col("url") |> 
+    unnest(url) |> 
+    distinct()
+  
+  df = urls |> 
+    mutate(
+      city = url |> 
+        str_remove("https://wvtourism.com/") |> 
+        str_remove_all("/") |> 
+        str_replace_all("-", " ") |> 
+        str_to_title()
+    )
+  
+  return(df)
+}
+
+cities = resps_successes_travel_regions |> 
+  map(extract_cities) |> 
+  list_rbind() |> 
+  mutate( # Summersville & Hinton need fixes
+    city = city |> 
+      str_remove("Places To Go") |> 
+      str_remove_all("\\d") |> 
+      str_squish() |> 
+      str_to_title()) |> 
+  select(city, url)
+```
+
+## City Info
+
+And finally we collect some info from the city pages.
+
+Working on this block, I found that the pages are not equally populated, so `extract_city_info` accounts for the different page types.
+
+```{r}
+reqs_cities = cities |> 
+  pull(url) |> 
+  map(get_request)
+
+resps_cities = reqs_cities |> 
+  req_perform_sequential(on_error = "continue")
+
+resps_failures_cities = resps_failures(resps_cities) |> print()
+resps_successes_cities = resps_successes(resps_cities) |> print()
+
+extract_city_info = function(resp) {
+
+  page = resp |> resp_body_html()
+  
+  header_count = page |> 
+    html_elements("h3.wp-block-heading") |>
+    html_text2() |> 
+    as_tibble_col() |> 
+    filter(value != "") |> 
+    NROW()
+
+  if (header_count == 0) {
+    title = page |> 
+      html_element("h1") |> 
+      html_text()
+    
+    description = page |> 
+      html_element("div.desc") |> 
+      html_element("p") |> 
+      html_text2()
+    
+    categories = NULL
+  }
+  
+  if (header_count > 0) {
+    title = page |> 
+      html_element("h1.title") |> 
+      html_text2()
+    
+    description = page |> 
+      html_element(".wvto-hero") |> 
+      html_children() |> 
+      html_children() |> 
+      html_children() |>  
+      html_text2()
+    
+    # Shepherdstown
+    categories = page |> 
+      html_elements(".wp-block-group") |> 
+      html_children() |> 
+      html_children() |> 
+      html_text2() |> 
+      as_tibble_col("category") |> 
+      filter(category != "") |> 
+      slice_head(n = 2 * header_count) |> 
+      mutate(
+        row_number = row_number(),
+        description = lead(category)) |> 
+      filter(row_number %% 2 == 1) |> 
+      select(-row_number) |> 
+      pivot_wider(
+        names_from = category,
+        values_from = description)
+    
+    if (ncol(categories) != header_count) {
+      # Charleston
+      categories = page |> 
+        html_elements(".wp-block-columns")  |> 
+        html_children() |> 
+        html_children() |> 
+        html_text2() |> 
+        as_tibble_col("category") |> 
+        filter(category != "") |> 
+        slice_head(n = 2 * header_count) |> 
+        mutate(
+          row_number = row_number(),
+          description = lead(category)) |> 
+        filter(row_number %% 2 == 1) |> 
+        select(-row_number) |> 
+        pivot_wider(
+          names_from = category,
+          values_from = description)
+    }
+  }
+  
+  df = tibble(
+    city = title,
+    description = description) |> 
+    bind_cols(categories)
+  
+  return(df)
+}
+
+city_info = resps_successes_cities |> 
+  map(extract_city_info, .progress = TRUE) |> 
+  list_rbind() |> 
+  mutate(
+    city = city |> 
+      str_remove(fixed(" Convention & Visitors Bureau (CVB)")) |> 
+      str_remove(fixed(" Convention and Visitors Bureau (CVB)")) |> 
+      str_remove(fixed(" / Berkeley")) |> 
+      str_remove(fixed("Greater ")),
+    description = if_else(
+      str_detect(description, "\\n"), 
+      str_remove(description, ".*\\n"), 
+      description),
+    across(where(is.character), str_squish)) |> 
+  clean_names()
+```
+
+Now we combine all the data.
+
+```{r}
+cities_full = cities |> 
+  full_join(city_info, join_by(city))
+
+View(cities_full)
+```
+
+## Write to DB
+
+Everything looks good, so we will write to the database.
+
+```{r}
+dbWriteTable(con, "cities", cities_full)
+dbReadTable(con, "cities") |> as_tibble()
+dbListTables(con) |> as_tibble_col(column_name = "tables")
+dbDisconnect(con)
+```

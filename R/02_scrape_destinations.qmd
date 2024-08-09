@@ -1,12 +1,12 @@
-# Introduction
+# Scrape Destinations
 
-This notebooks scrapes the webpages for all of the destinations on wvtourism.com, with the exception of State Parks, Scenic Routes, and Cities as they have a far different structure or website that will be scraped in another notebook.
+This notebook scrapes the webpages for all of the destinations on wvtourism.com, with the exception of State Parks, Scenic Routes, and Cities as they have a different structure or website that will be scraped in another notebook.
 
-After studying the sitemap, I found that there are about 2,200 URLs for different destinations, websites, etc., but they are not all active. Also, the website follows a structure for grouping these links in a way I like, so I will follow the path it has set.
+After studying the sitemap, I found that there are around 2,200 URLs for different destinations, websites, etc., but they are not all active. Also, the website follows a structure for grouping these links in a way I like, so I will follow the path it has set.
 
 The website is pretty much broken down into three Groups: Things to Do, Place to Stay, & Places to Go, with Things To Do having sub-groups. Within these Groups, there are Categories of Destinations. This code will systematically extract all of these links and build our database of Destinations that we will use in this map.
 
-# Initialize
+## Initialize
 
 Load the necessary packages as well as functions used across the project.
 
@@ -20,21 +20,43 @@ library(janitor)
 library(DBI)
 library(mapboxapi)
 
+source("R/functions/scraping.R")
+
 con = dbConnect(duckdb::duckdb(), "database.duckdb")
 ```
 
-## Custom Functions
+## Categories
+
+We will use {httr2} & {rvest} to build our ultimate set of Destination urls, and start with the known URLs for the Groups.
+
 ```{r}
-#| label: custom-functions
+groups = tribble(
+  ~ group, ~ url,
+  "Things To Do - Outdoor Adventures", "https://wvtourism.com/things-to-do/outdoor-adventures/",
+  "Things To Do - Luxury Relaxation", "https://wvtourism.com/things-to-do/luxury-relaxation/",
+  "Things To Do - Arts, Culture, & History", "https://wvtourism.com/things-to-do/arts-culture-history/",
+  "Places To Stay", "https://wvtourism.com/places-to-stay/",
+  "Places To Go", "https://wvtourism.com/places-to-go/"
+)
 
-get_request = function(url) {
-  url |>
-    request() |>
-    req_method("GET") |>
-    req_throttle(rate = 2) |> # 30 requests per minute
-    req_user_agent("Ozan Ozbeker (https://github.com/ozanozbeker/wv-tourism-interactive-map)")
-}
+reqs_groups = groups |>
+  pull(url) |> 
+  map(get_request)
 
+resps_groups = reqs_groups |> 
+  req_perform_sequential(on_error = "continue")
+```
+
+{httr2} takes care of error-handling for us, so if something goes wrong with the HTTP request, it will document that and continue. Here we continue with the successes from `links_request` and trouble shoot the failures if necessary.
+
+```{r}
+resps_failures_groups = resps_failures(resps_groups) |> print()
+resps_successes_groups = resps_successes(resps_groups) |> print()
+```
+
+Now we need to extract all of the different Categories from the Groups. We create a custom function for this that is specific to the design of wvtourism.com (at least for these pages). As mentioned in the intro, we will ignore some of the results as they will be covered in other scrapes.
+
+```{r}
 extract_categories = function(resp) {
   resp |> 
     resp_body_html() |>
@@ -48,6 +70,34 @@ extract_categories = function(resp) {
     filter(is.na(class)) |>
     select(category = title, url = href)
 }
+
+categories = resps_successes_groups |> 
+  map(extract_categories) |>
+  list_rbind() |> 
+  filter(
+    category != "Stargazing", # Section of website unfinished as of 2024-07-20
+    # The following are big/different enough to need their own scripts:
+    str_detect(url, "/state-parks/", negate = TRUE),    # scrape_state-parks.R
+    str_detect(url, "/scenic-routes/", negate = TRUE),  # scrape_routes.R
+    str_detect(url, "/travel-regions/", negate = TRUE)) # scrape_cities.R
+
+print(categories)
+```
+
+## Destinations
+
+With all of the Category URLs extracted, now we go back in and find all of the URLs for the featured Destinations within each Category. Will be doing the same steps as above, so I will condense all of the code to one chunk.
+
+```{r}
+reqs_categories = categories |> 
+  pull(url) |>
+  map(get_request)
+
+resps_categories = reqs_categories |> 
+  req_perform_sequential(on_error = "continue")
+
+resps_failures_categories = resps_failures(resps_categories)
+resps_successes_categories = resps_successes(resps_categories)
 
 extract_destinations = function(resp) {
 
@@ -126,159 +176,6 @@ extract_destinations = function(resp) {
   return(data)
 }
 
-pull_destination_from_url = function(url_wvtourism) {
-  location_tibble = url_wvtourism |>
-    str_locate_all("/") |>
-    as_tibble_col() |>
-    unnest("value") |>
-    slice_tail(n = 2)
-
-  last_index = location_tibble |>
-    slice_tail(n = 1) |>
-    pluck(1) |>
-    pluck(1)
-
-  second_last_index = location_tibble |>
-    slice_head(n = 1) |>
-    pluck(1) |>
-    pluck(1)
-
-  company = url_wvtourism |> str_sub(second_last_index, last_index) |>
-    str_replace_all("-", " ") |>
-    str_remove_all("/") |>
-    str_to_title()
-
-  return(company)
-}
-
-get_coords = function(url_wvtourism, address) {
-  
-  coords = mb_geocode(
-    search_text = address,
-    search_within = c(-82.644739, 37.201483, -77.719519, 40.638801),
-    language = "en",
-    country = "US"
-  )
-  
-  data = tibble(
-    url_wvtourism = url_wvtourism,
-    lat = coords[[1]],
-    lon = coords[[2]]
-  )
-  
-  return(data)
-}
-
-get_address = function(url_wvtourism, lat, lon) {
-  
-  address = mb_reverse_geocode(
-    coordinates = c(lat, lon)
-  )
-  
-  data = tibble(
-    url_wvtourism = url_wvtourism,
-    address = address
-  )
-  
-  return(data)
-}
-
-extract_page = function(resp) {
-  # Read Page
-  page = resp_body_html(resp)
-
-  # Extract data
-  description = page |> 
-    html_element(".desc") |> 
-    html_text2() |> 
-    str_replace_all("\n", " ") |> 
-    str_replace_all("  ", " ")
-  
-  website = page |> 
-    html_element(".meta_block--website a") |> 
-    html_attr("href")
-  
-  phone = page |> 
-    html_element('span[itemprop="telephone"]') |> 
-    html_text2()
-  
-  url_company = page |> 
-    html_element('a[itemprop="email"]') |> 
-    html_text2()
-
-  # Return tibble
-  data = tibble(
-    url_wvtourism = resp_url(resp),
-    description = description,
-    website = website,
-    phone = phone,
-    url_company = url_company
-  )
-
-  return(data)
-}
-```
-
-# Categories
-
-We will use {httr2} & {rvest} to build our ultimate set of Destination urls, and start with the known URLs for the Groups.
-
-```{r}
-groups = tribble(
-  ~ group, ~ url,
-  "Things To Do - Outdoor Adventures", "https://wvtourism.com/things-to-do/outdoor-adventures/",
-  "Things To Do - Luxury Relaxation", "https://wvtourism.com/things-to-do/luxury-relaxation/",
-  "Things To Do - Arts, Culture, & History", "https://wvtourism.com/things-to-do/arts-culture-history/",
-  "Places To Stay", "https://wvtourism.com/places-to-stay/",
-  "Places To Go", "https://wvtourism.com/places-to-go/"
-)
-
-reqs_groups = groups |>
-  pull(url) |> 
-  map(get_request)
-
-resps_groups = reqs_groups |> 
-  req_perform_sequential(on_error = "continue")
-```
-
-{httr2} takes care of error-handling for us, so if something goes wrong with the HTTP request, it will document that and continue. Here we continue with the successes from `links_request` and trouble shoot the failures if necessary.
-
-```{r}
-resps_failures_groups = resps_failures(resps_groups) |> print()
-resps_successes_groups = resps_successes(resps_groups) |> print()
-```
-
-Now we need to extract all of the different Categories from the Groups. We create a custom function for this that is specific to the design of wvtourism.com (at least for these pages). As mentioned in the intro, we will ignore some of the results as they will be covered in other scrapes.
-
-```{r}
-categories = resps_successes_groups |> 
-  map(extract_categories) |>
-  list_rbind() |> 
-  filter(
-    category != "Stargazing", # Section of website unfinished as of 2024-07-20
-    # The following are big/different enough to need their own scripts:
-    str_detect(url, "/state-parks/", negate = TRUE),    # scrape_state-parks.R
-    str_detect(url, "/scenic-routes/", negate = TRUE),  # scrape_routes.R
-    str_detect(url, "/travel-regions/", negate = TRUE)) # scrape_cities.R
-
-print(categories)
-```
-
-# Destinations
-
-With all of the Category URLs extracted, now we go back in and find all of the URLs for the featured Destinations within each Category. Will be doing the same steps as above, so I will condense all of the code to one chunk.
-
-```{r}
-reqs_categories = categories |> 
-  pull(url) |>
-  map(get_request)
-
-resps_categories = reqs_categories |> 
-  req_perform_sequential(on_error = "continue")
-
-resps_failures_categories = resps_failures(resps_categories)
-resps_successes_categories = resps_successes(resps_categories)
-
 results_destinations = resps_successes_categories |> 
   map(extract_destinations, .progress = TRUE) |> 
   list_rbind()
@@ -315,7 +212,7 @@ destinations_clean = results_destinations |>
   distinct()
 ```
 
-## DB Tables
+### DB Tables
 
 Before we tidy the Destinations table even more, we can pull out some other tables we will use later.
 
@@ -351,7 +248,7 @@ destinations_unique = destinations_clean |>
   arrange(url_wvtourism)
 ```
 
-## Geocoding
+### Geocoding
 
 With the clean data tables, we need to latitude and longitude values for the destinations so that we can pin them on the map. To do this, we will use the Mapbox Geocoding API. As a bonus, this method can also get us a clean address with the reverse geocode feature.
 
@@ -367,7 +264,7 @@ address = coords |>
   list_rbind()
 ```
 
-## Page Info
+### Page Info
 
 Finally, we will scrape the web pages for each destination on the wvtourism website. This will give us some more info like their website, phone, etc., as well as a description we can use when the user points on the icon on the map.
 
@@ -382,28 +279,65 @@ resps_pages = reqs_pages |>
 resps_failures_pages = resps_failures(resps_pages)
 resps_successes_pages = resps_successes(resps_pages)
 
+extract_page = function(resp) {
+  # Read Page
+  page = resp_body_html(resp)
+
+  # Extract data
+  description = page |> 
+    html_element(".desc") |> 
+    html_text2() |> 
+    str_replace_all("\n", " ") |> 
+    str_replace_all("  ", " ")
+  
+  website = page |> 
+    html_element(".meta_block--website a") |> 
+    html_attr("href")
+  
+  phone = page |> 
+    html_element('span[itemprop="telephone"]') |> 
+    html_text2()
+  
+  url_company = page |> 
+    html_element('a[itemprop="email"]') |> 
+    html_text2()
+
+  # Return tibble
+  data = tibble(
+    url_wvtourism = resp_url(resp),
+    description = description,
+    website = website,
+    phone = phone,
+    url_company = url_company
+  )
+
+  return(data)
+}
+
 results_pages = resps_successes_pages |> 
   map(extract_page, .progress = TRUE) |> 
   list_rbind()
 ```
 
-
-# Finalize
+## Finalize
 
 With all of our scrapes done, we will build one final `destinations` table.
 
 ```{r}
 destinations = destinations_unique |> 
   left_join(coords, join_by(url_wvtourism)) |> 
-  left_join(address, join_by(url_wvtourism))
+  left_join(address, join_by(url_wvtourism)) |> 
+  left_join(results_pages, join_by(url_wvtourism)) |> 
+  mutate(
+    across(where(is.character), \(col) if_else(col == "", NA_character_, str_squish(col)))
+  )
 ```
 
-
 ## Write to DB
+
 With everything situated, we will update our database.
 
 ```{r}
-
 destinations = destinations_unique |> 
   left_join(coords, join_by(url_wvtourism)) |> 
   left_join(address, join_by(url_wvtourism)) |> 
@@ -411,5 +345,6 @@ destinations = destinations_unique |>
 dbWriteTable(con, "group_subgroup_category", group_subgroup_category)
 dbWriteTable(con, "destination_category", destination_category)
 dbWriteTable(con, "destinations", destinations)
+dbListTables(con) |> as_tibble_col(column_name = "tables")
 dbDisconnect(con)
 ```

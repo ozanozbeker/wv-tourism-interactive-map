@@ -1,0 +1,219 @@
+# Scrape Routes
+
+This notebook scrapes the featured rode trip routes in the website. These routes are not really destinations themselves, but are comprised of destinations linked together. We will scrape the "points" and then later geocode and use them to create routes that will display on the map.
+
+## Initialize
+
+Load the necessary packages as well as functions used across the project.
+
+```{r}
+#| label: initialize
+
+library(tidyverse)
+library(httr2)
+library(rvest)
+library(janitor)
+library(DBI)
+
+source("R/functions/scraping.R")
+
+con = dbConnect(duckdb::duckdb(), "duck.db")
+dbListTables(con) |> as_tibble_col("tables")
+```
+
+## Road Trips
+
+The Road Trips (Scenic Routes) is the homepage for all of the routes featured in the website. There are the 4 "Mountain Rides", many other road trips, and the Waterfall Trail.
+
+```{r}
+homepage_url = "https://wvtourism.com/things-to-do/arts-culture-history/scenic-routes/"
+homepage_req = get_request(homepage_url)
+homepage_resp = req_perform(homepage_req)
+
+print(homepage_resp)
+
+homepage_info = extract_homepage_info(homepage_resp) |> 
+  rename(homepage = title) |> 
+  mutate(url = homepage_url)
+
+print(homepage_info)
+dbWriteTable(con, "homepages", homepage_info, append = TRUE)
+```
+
+## Mountain Rides
+
+The Mountain Rides are featured at the top of the page. The formatting of the website also grabs the Waterfalls page, which isn't a route technically, but we will still extract its information for later.
+
+```{r}
+mountain_rides_urls = homepage_resp |> 
+  resp_body_html() |> 
+  html_elements("div.wp-block-genesis-blocks-gb-column") |> 
+  html_children() |> 
+  html_elements("p") |> 
+  html_elements("a") |> 
+  html_attr("href") |> 
+  as_tibble_col("url") |> 
+  mutate(
+    .before = url,
+    road_trip = url |> 
+      str_remove("https://wvtourism.com/") |> 
+      str_remove_all("/") |> 
+      str_replace_all("-", " ") |> 
+      str_to_title())
+
+print(mountain_rides_urls)
+```
+
+Now we will extract the routes from the Mountain Rides. Unlike the previous scripts, the Mountain Rides will create two tables, one info table like usual, and another table that has the stops for each Mountain Ride that we will use later to create the routes on visually on the map.
+
+```{r}
+mountain_rides_reqs = mountain_rides_urls |> 
+  filter(str_detect(url, "waterfall", negate = TRUE)) |> 
+  pull(url) |> 
+  map(get_request)
+
+mountain_rides_resps = mountain_rides_reqs |> 
+  req_perform_sequential(on_error = "continue")
+
+mountain_rides_resps_failures = resps_failures(mountain_rides_resps) |> print()
+mountain_rides_resps_successes = resps_successes(mountain_rides_resps) |> print()
+
+mountain_rides = mountain_rides_resps_successes |> 
+  map(extract_mountain_ride_info) |> 
+  list_rbind() |> 
+  left_join(mountain_rides_urls, join_by(road_trip)) |> 
+  mutate(is_featured = TRUE)
+
+mountain_ride_routes = mountain_rides_resps_successes |> 
+  map(extract_mountain_ride_route) |> 
+  list_rbind()
+
+print(mountain_rides)
+print(mountain_ride_routes)
+
+dbWriteTable(con, "road_trips", mountain_rides)
+dbWriteTable(con, "road_trip_stops", mountain_rides_routes)
+```
+
+## (The Remaining) Road Trips
+
+These routes don't really have names like the four Mountain Rides, but they are essentially the same thing so I'm going to be keeping these in the same format as above. The Mountain Rides will just have extra details that will be shown on the map.
+
+There are two types of trips:
+
+1)  Where they just give a list of the stop with descriptions, and;
+2)  Where they breakdown the Road Trip by day in paragraph form.
+
+I do not have the patience or the willpower for option 2, so I will be deleting those trips.
+
+```{r}
+road_trips_urls = homepage_resp |> 
+  resp_body_html() |> 
+  html_elements("div.image-card") |> 
+  html_children() |>
+  html_attrs() |> 
+  as_tibble_col() |> 
+  unnest_wider("value") |> 
+  mutate(
+    road_trip = href |> 
+      str_remove("https://wvtourism.com/") |> 
+      str_remove_all("/") |> 
+      str_replace_all("-", " ") |> 
+      str_to_title()) |> 
+  distinct(road_trip, description = title, url = href)
+
+road_trips_reqs = road_trips_urls |> 
+  pull(url) |> 
+  map(get_request)
+
+road_trips_resps = road_trips_reqs |> 
+  req_perform_sequential(on_error = "continue")
+
+road_trips_resps_failures = resps_failures(road_trips_resps) |> print()
+road_trips_resps_successes = resps_successes(road_trips_resps)
+
+road_trips = road_trips_resps_successes |> 
+  map(extract_road_trip_info) |> 
+  list_rbind() |> 
+  filter(!is.na(details)) |> 
+  left_join(road_trips_urls, join_by(url)) |> # In hindsight, I should've been using URL all along for these left joins.
+  mutate(is_featured = FALSE) |> 
+  select(road_trip, description, details, url, is_featured)
+
+road_trip_routes = road_trips_resps_successes |> 
+  map(extract_road_trip_route) |> 
+  list_rbind()
+
+print(road_trips)
+print(mountain_rides_routes)
+
+dbWriteTable(con, "road_trips", road_trips, append = TRUE)
+dbWriteTable(con, "road_trip_stops", road_trip_routes, append = TRUE)
+```
+
+## Waterfalls (more Destinations)
+
+Now will create a list of all of the featured waterfalls. For simplicity's sake, I'm just going use the Waterfalls as Destinations, with "Waterfalls" as the Category and put them under the "Places to Go" group (homepage).
+
+These steps are almost identical to the sections in `02_scrape_destinations.qmd` with some minor adjustments.
+
+```{r}
+category_url = mountain_rides_urls |> 
+  filter(str_detect(url, "waterfall")) |> 
+  pull(url)
+
+category_req = get_request(category_url)
+category_resp = req_perform(category_req)
+
+category = extract_homepage_info(category_resp) |> 
+  mutate(
+    url = category_url,
+    group = "Places to Go",
+    category = "Waterfalls") |> 
+  select(category, description, group, url)
+
+print(category)
+dbWriteTable(con, "categories", category, append = TRUE)
+
+destinations_urls = extract_destinations_urls(homepage_resp) |> 
+  mutate(category = "Waterfalls")
+
+destination_category_cross = destinations_urls |> 
+  distinct(url, category) |> 
+  arrange(url)
+
+dbWriteTable(con, "destination_category_cross", destination_category_cross, append = TRUE)
+
+destinations_reqs = destinations_urls |> 
+  pull(url) |> 
+  map(get_request)
+
+destinations_resps = destinations_reqs |> 
+  req_perform_sequential(on_error = "continue")
+
+destinations_resps_failures = resps_failures(destinations_resps) |> print()
+destinations_resps_successes = resps_successes(destinations_resps)
+
+destinations = destinations_resps_successes |> 
+  map(extract_destination_info) |> 
+  list_rbind() |> 
+  mutate(zip = NA_character_)
+
+dbWriteTable(con, "destinations", destinations, append = TRUE)
+```
+
+## Finalize
+
+Let's look at the tables we've created so far.
+
+```{r}
+dbListTables(con) |> 
+  map(\(table) dbReadTable(con, table) |> as_tibble()) |> 
+  set_names(dbListTables(con))
+```
+
+Everything looks good so we will close the DB connection.
+
+```{r}
+dbDisconnect(con)
+```

@@ -1,0 +1,55 @@
+```{r}
+library(mapboxapi)
+```
+
+
+```{r}
+get_coords = function(url_wvtourism, address) {
+
+  coords = mb_geocode(
+    search_text = address,
+    search_within = c(-82.644739, 37.201483, -77.719519, 40.638801),
+    language = "en",
+    country = "US"
+  )
+
+  data = tibble(
+    url_wvtourism = url_wvtourism,
+    lat = coords[[1]],
+    lon = coords[[2]]
+  )
+
+  return(data)
+}
+
+get_address = function(url_wvtourism, lat, lon) {
+
+  address = mb_reverse_geocode(
+    coordinates = c(lat, lon)
+  )
+
+  data = tibble(
+    url_wvtourism = url_wvtourism,
+    address = address
+  )
+
+  return(data)
+}
+```
+
+
+### Geocoding
+
+With the clean data tables, we need to latitude and longitude values for the destinations so that we can pin them on the map. To do this, we will use the Mapbox Geocoding API. As a bonus, this method can also get us a clean address with the reverse geocode feature.
+
+```{r}
+coords = destinations_unique |> 
+  mutate(address = str_c(destination, city, state, sep = ", ")) |> 
+  select(url_wvtourism, address) |> 
+  pmap(get_coords, .progress = TRUE) |> 
+  list_rbind()
+
+address = coords |>
+  pmap(get_address, .progress = TRUE) |> 
+  list_rbind()
+```

@@ -1,42 +1,32 @@
-# Introduction
+# Build DuckDB
 
 This notebook builds the DuckDB database & base tables from scratch. Everything not in this file is built via the scrapes later in the pipeline.
 
-# Initialize
+## Initialize
 
-These are the core packages needed to rebuild the database. We will use other packages, but they are going to be in the relevant code-chunks to show the association.
+These are the core packages needed to build the database.
 
 ```{r}
-#| label: load-packages
-
 library(DBI)
 library(duckdb)
 library(tidyverse)
+library(zipcodeR)
+library(jsonlite)
 ```
 
-I'm using [DuckDB](%22https://duckdb.org/%22) for this project because flat files are annoying and DuckDB is light-weight and very easy to use.
+I'm using [DuckDB](https://duckdb.org/) for this project because flat files are annoying and DuckDB is light-weight and very easy to use.
 
 ```{r}
 #| label: db-connect
 
-con = dbConnect(duckdb(), "database.duckdb")
-dbListTables(con) |> as_tibble_col("tables")
+con = dbConnect(duckdb(), "duck.db")
 ```
-
-# Tables
-
-This project uses various data sources
 
 ## Zip Codes
 
 A lot of the addresses from the scrapes are non-standard, so this table of zip codes will help standardize the results. [zipcodeR]() makes it very easy to obtain tibbles of zip codes and relevant information, but it does use `<glob>` storage of `<raw>` values which was new for me. Shout out to [this](https://stackoverflow.com/a/77285606/26439015) Stack Overflow answer for suggesting the `jsonlite::parse_gzjson_raw()` solution.
 
 ```{r}
-#| label: zip-codes
-
-library(zipcodeR)
-library(jsonlite)
-
 zip_codes = search_state("WV") |> 
   select(zipcode, major_city, cities = common_city_list, county) |>
   mutate(cities = map(cities, parse_gzjson_raw)) |> 
@@ -46,7 +36,6 @@ zip_codes = search_state("WV") |>
     cities = str_c(cities, collapse = "|"))
 
 dbWriteTable(con, "zip_codes", zip_codes)
-dbListTables(con)
 ```
 
 ## Travel Regions
@@ -54,9 +43,7 @@ dbListTables(con)
 The WV Tourism website designated 9 different regions to the counties of WV as Travel Regions. I hate to admit it, but as these aren't **official** in anyway, I just had to make this table by hand.
 
 ```{r}
-#| label: travel-regions
-
-travel_regions = tribble(
+travel_region_county_cross = tribble(
   ~region,                         ~county,
   "Eastern Panhandle",             "Berkeley County",
   "Eastern Panhandle",             "Jefferson County",
@@ -115,15 +102,14 @@ travel_regions = tribble(
   "Potomac Highlands",             "Tucker County"
 )
 
-dbWriteTable(con, "travel_regions", travel_regions)
-dbListTables(con)
+dbWriteTable(con, "travel_region_county_cross", travel_region_county_cross)
 ```
 
-# Finalize
+## Finalize
+
 Finally, we disconnect from the DB.
 
 ```{r}
-#| label: db-disconnect
-
+dbListTables(con) |> as_tibble_col("tables")
 dbDisconnect(con)
 ```

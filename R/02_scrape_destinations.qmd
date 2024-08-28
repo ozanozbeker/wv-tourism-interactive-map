@@ -4,7 +4,7 @@ This notebook scrapes the webpages for all of the destinations on wvtourism.com,
 
 After studying the sitemap, I found that there are around 2,200 URLs for different destinations, websites, etc., but they are not all active. Also, the website follows a structure for grouping these links in a way I like, so I will follow the path it has set.
 
-The website is pretty much broken down into three Groups: Things to Do, Place to Stay, & Places to Go, with Things To Do having sub-groups. Within these Groups, there are Categories of Destinations. This code will systematically extract all of these links and build our database of Destinations that we will use in this map.
+The website is pretty much broken down into three Groups: Things to Do, Place to Stay, & Places to Go, with Things To Do having sub-groups. Within these Groups, there are Categories of Destinations. This code will extract all of these links and build our database of Destinations that we will use in this map.
 
 ## Initialize
 
@@ -18,333 +18,138 @@ library(httr2)
 library(rvest)
 library(janitor)
 library(DBI)
-library(mapboxapi)
 
 source("R/functions/scraping.R")
 
-con = dbConnect(duckdb::duckdb(), "database.duckdb")
+con = dbConnect(duckdb::duckdb(), "duck.db")
+dbListTables(con) |> as_tibble_col("tables")
+```
+
+## Groups
+
+Most of the destinations are split between 5 groups, the three sub groups of "Things To Do" as well as "Places To Stay" and "Places To Go".
+
+```{r}
+homepages_urls = tribble(
+  ~ homepage, ~ url,
+  "Outdoor Adventures", "https://wvtourism.com/things-to-do/outdoor-adventures/",
+  "Luxury & Relaxation", "https://wvtourism.com/things-to-do/luxury-relaxation/",
+  "Culture & Lifestyle", "https://wvtourism.com/things-to-do/arts-culture-history/",
+  "Places to Stay", "https://wvtourism.com/places-to-stay/",
+  "Places to Go", "https://wvtourism.com/places-to-go/"
+)
+
+homepages_reqs = homepages_urls |>
+  pull(url) |> 
+  map(get_request)
+
+homepages_resps = homepages_reqs |> 
+  req_perform_sequential(on_error = "continue")
+```
+
+{httr2} takes care of error-handling for us, so if something goes wrong with the HTTP request, it will document that and continue. Here we continue with the successful requests and trouble shoot the failures if necessary.
+
+```{r}
+homepages_resps_failures = resps_failures(homepages_resps) |> print()
+homepages_resps_successes = resps_successes(homepages_resps) |> print()
+```
+
+Somewhere in the map UI I want to have little descriptions for the map options, so we will pull some info from the homepages.
+
+```{r}
+homepages = homepages_resps_successes |> 
+  map(extract_homepage_info) |> 
+  list_rbind() |> 
+  rename(homepage = title) |> 
+  left_join(homepages_urls, join_by(homepage))
+
+dbWriteTable(con, "homepages", homepages)
 ```
 
 ## Categories
 
-We will use {httr2} & {rvest} to build our ultimate set of Destination urls, and start with the known URLs for the Groups.
-
-```{r}
-groups = tribble(
-  ~ group, ~ url,
-  "Things To Do - Outdoor Adventures", "https://wvtourism.com/things-to-do/outdoor-adventures/",
-  "Things To Do - Luxury Relaxation", "https://wvtourism.com/things-to-do/luxury-relaxation/",
-  "Things To Do - Arts, Culture, & History", "https://wvtourism.com/things-to-do/arts-culture-history/",
-  "Places To Stay", "https://wvtourism.com/places-to-stay/",
-  "Places To Go", "https://wvtourism.com/places-to-go/"
-)
-
-reqs_groups = groups |>
-  pull(url) |> 
-  map(get_request)
-
-resps_groups = reqs_groups |> 
-  req_perform_sequential(on_error = "continue")
-```
-
-{httr2} takes care of error-handling for us, so if something goes wrong with the HTTP request, it will document that and continue. Here we continue with the successes from `links_request` and trouble shoot the failures if necessary.
-
-```{r}
-resps_failures_groups = resps_failures(resps_groups) |> print()
-resps_successes_groups = resps_successes(resps_groups) |> print()
-```
-
 Now we need to extract all of the different Categories from the Groups. We create a custom function for this that is specific to the design of wvtourism.com (at least for these pages). As mentioned in the intro, we will ignore some of the results as they will be covered in other scrapes.
 
 ```{r}
-extract_categories = function(resp) {
-  resp |> 
-    resp_body_html() |>
-    html_element("ul.ttd") |>
-    html_children() |>
-    html_children() |>
-    html_attrs() |>
-    as_tibble_col() |>
-    unnest_wider(value) |>
-    clean_names() |>
-    filter(is.na(class)) |>
-    select(category = title, url = href)
-}
-
-categories = resps_successes_groups |> 
-  map(extract_categories) |>
+categories_urls = homepages_resps_successes |> 
+  map(extract_categories_urls) |>
   list_rbind() |> 
   filter(
-    category != "Stargazing", # Section of website unfinished as of 2024-07-20
+    category != "Stargazing", # Section of website unfinished as of 2024-08-14
     # The following are big/different enough to need their own scripts:
     str_detect(url, "/state-parks/", negate = TRUE),    # scrape_state-parks.R
     str_detect(url, "/scenic-routes/", negate = TRUE),  # scrape_routes.R
     str_detect(url, "/travel-regions/", negate = TRUE)) # scrape_cities.R
 
-print(categories)
+categories_reqs = categories_urls |> pull(url) |> map(get_request)
+categories_resps = categories_reqs |> req_perform_sequential(on_error = "continue")
+categories_resps_failures = resps_failures(categories_resps)
+categories_resps_successes = resps_successes(categories_resps)
+
+categories = categories_resps_successes |> 
+  map(extract_homepage_info) |> 
+  list_rbind() |> 
+  rename(category = title) |> 
+  left_join(categories_urls, join_by(category))
+
+dbWriteTable(con, "categories", categories)
 ```
 
 ## Destinations
 
-With all of the Category URLs extracted, now we go back in and find all of the URLs for the featured Destinations within each Category. Will be doing the same steps as above, so I will condense all of the code to one chunk.
+With all of the Categories extracted, now we go back in and find all of the URLs for the featured Destinations within each Category. We can also pull some mapping data that we will use for later.
 
 ```{r}
-reqs_categories = categories |> 
-  pull(url) |>
-  map(get_request)
-
-resps_categories = reqs_categories |> 
-  req_perform_sequential(on_error = "continue")
-
-resps_failures_categories = resps_failures(resps_categories)
-resps_successes_categories = resps_successes(resps_categories)
-
-extract_destinations = function(resp) {
-
-  # Metadata
-  url = resp_url(resp)
-  
-  group = case_when(
-    str_detect(url, "things-to-do") ~ "Things To Do",
-    str_detect(url, "places-to-stay") ~ "Places To Stay",
-    str_detect(url, "places-to-go") ~ "Places To Go",
-    .default = NA_character_
-  )
-  
-  sub_group = case_when(
-    str_detect(url, "outdoor-adventures") ~ "Outdoor Adventures",
-    str_detect(url, "luxury-relaxation") ~ "Luxury Relaxation",
-    str_detect(url, "arts-culture-history") ~ "Arts, Culture, & History",
-    .default = NA_character_
-  )
-  
-  positions = str_locate_all(url, "/")[[1]]
-  last_two = positions[(nrow(positions) - 1):nrow(positions), ]
-  start = last_two[1, "end"] + 1
-  end = last_two[2, "start"] - 1
-  
-  category = url |> str_sub(start = start, end = end)
-  
-  # Extract Info
-  base = resp |>
-    resp_body_html() |>
-    html_element(".listings-wall") |>
-    html_children()
-  
-  data_1 = base |>
-    html_attrs() |>
-    as_tibble_col() |>
-    unnest_wider(value) |>
-    clean_names() |>
-    select(-class) |>
-    remove_empty("rows") |>
-    rename(city = data_city, region = data_region, county = data_county) |>
-    mutate(across(everything(), str_to_title))
-  
-  data_2 = base |>
-    html_children() |>
-    html_children() |>
-    html_elements("div.meta-top") |>
-    html_children() |>
-    html_attrs() |>
-    as_tibble_col() |>
-    unnest_wider(value) |>
-    clean_names() |>
-    select(title, href) |>
-    mutate(
-      source = if_else(str_detect(href, "wvtourism"), "wvtourism", "google"),
-      title = str_remove_all(title, "LIST: |MAPS: ")) |>
-    pivot_wider(
-      names_from = source,
-      names_prefix = "url_",
-      values_from = href,
-      values_fn = list) |>
-    unnest_longer(col = everything()) |>
-    rename(destination = title) |>
-    mutate(address = str_sub(url_google, 28L, -1L)) |>
-    select(-url_google)
-  
-  data = data_2 |> 
-    bind_cols(data_1) |> 
-    mutate(
-      group = group,
-      sub_group = sub_group,
-      category = category,
-      .before = destination
-    )
-  
-  return(data)
-}
-
-results_destinations = resps_successes_categories |> 
-  map(extract_destinations, .progress = TRUE) |> 
+destinations_urls = categories_resps_successes |> 
+  map(extract_destinations_urls, .progress = TRUE) |> 
   list_rbind()
+
+destinations_reqs = destinations_urls |> distinct(url) |> pull(url) |> map(get_request)
+destinations_resps = destinations_reqs |> req_perform_sequential(on_error = "continue")
+destinations_resps_successes = resps_successes(destinations_resps)
+destinations_resps_failures = resps_failures(destinations_resps)
 ```
 
-Now that we have all of our destinations in one table, there is a lot of cleaning to be done before it can be used in map. There are duplicate rows for the destinations, as a destination can have more than one category. We will clean up the names, and create some normalized tables to store all of this information.
+There is a lot of cleaning to be done before it can be used in the map. There are duplicate rows for the destinations, as a destination can have more than one category. We will clean up the names, and create some normalized tables to store all of this information.
 
 ```{r}
-destinations_clean = results_destinations |> 
+destination_category_cross = destinations_urls |> 
+  distinct(url, category) |> 
+  arrange(url)
+
+dbWriteTable(con, "destination_category_cross", destination_category_cross)
+```
+
+Finally, we will scrape the web pages for each destination on the website. This function will be different than the usual `extract_homepage_info` we've been using because these pages are structured far differently, but will give us some more info like their website, phone, etc., as well as a description we can use when the user points on the icon on the map.
+
+```{r}
+destinations = destinations_resps_successes |> 
+  map(extract_destination_info, .progress = TRUE) |> 
+  list_rbind() |> 
   mutate(
-    across(where(is.character), \(col) if_else(col == "", NA_character_, str_squish(col))),
-    destination = coalesce(destination, pull_destination_from_url(url_wvtourism)),
-    region = if_else(region == "Array", NA_character_, region),
+    destination = coalesce(destination, pull_destination_from_url(url)),
     zip = if_else(
       str_sub(address, -5L, -5L) == "-",
       str_sub(address, -10L, -6L),
       str_sub(address, -5L, -1L)),
-    across(where(is.character), \(col) if_else(col == "", NA_character_, str_squish(col))),
-    category = category |> 
-      str_replace_all("-", " ") |> 
-      str_to_title(),
-    category = case_when(
-      category == "Atv Off Roading" ~ "ATV & Off-roading",
-      category == "Skiing Winter Sports" ~ "Skiing & Winter Sports",
-      category == "Rv And Camping" ~ "Camping & RV",
-      category == "Dining Drinks" ~ "Dining & Drinks",
-      category == "Farm To Table" ~ "Farm-To-Table",
-      category == "History Heritage" ~ "History & Heritage",
-      category == "Nightlife Entertainment" ~ "Nightlife & Entertainment",
-      category == "Bbs" ~ "Bed & Breakfasts",
-      category == "Hotels Motels" ~ "Hotels & Motels",
-      category == "Wmas" ~ "Wildlife Management Areas",
-      .default = category)) |> 
+    across(where(is.character), \(x) if_else(x == "", NA_character_, str_squish(x)))) |> 
   distinct()
-```
 
-### DB Tables
-
-Before we tidy the Destinations table even more, we can pull out some other tables we will use later.
-
-```{r}
-group_subgroup_category = destinations_clean |> 
-  distinct(group, sub_group, category)
-
-destination_category = destinations_clean |> 
-  distinct(url_wvtourism, category)
-```
-
-Now that we've removed extra info, we can bring the Destinations table down to one row per URL. We will also clean up the data some more as the website is not very consistent when it comes to address and locales.
-
-I chose to remove the address all together because the data is very poor in consistency. And when we geocode later, having the name of the business along with city and zip is more than enough.
-
-```{r}
-zips = dbReadTable(con, "zip_codes") |> as_tibble()
-travel_regions = dbReadTable(con, "travel_regions") |> as_tibble()
-
-destinations_unique = destinations_clean |> 
-  select(-group, -sub_group, -address, -category, -region) |> 
-  distinct() |> 
-  left_join(zips, join_by(zip == zipcode)) |> 
-  mutate(
-    across(where(is.character), \(col) if_else(col == "", NA_character_, str_squish(col))),
-    city = coalesce(major_city, city),
-    county = coalesce(county.y, county.x),
-    county = if_else(str_ends(county, "County"), county, str_c(county, " County")),
-    state = "WV") |> 
-  distinct(url_wvtourism, destination, city, county, state, zip) |> 
-  drop_na(everything()) |> 
-  filter(str_detect(zip, ",| |-", negate = TRUE)) |> 
-  arrange(url_wvtourism)
-```
-
-### Geocoding
-
-With the clean data tables, we need to latitude and longitude values for the destinations so that we can pin them on the map. To do this, we will use the Mapbox Geocoding API. As a bonus, this method can also get us a clean address with the reverse geocode feature.
-
-```{r}
-coords = destinations_unique |> 
-  mutate(address = str_c(destination, city, state, sep = ", ")) |> 
-  select(url_wvtourism, address) |> 
-  pmap(get_coords, .progress = TRUE) |> 
-  list_rbind()
-
-address = coords |>
-  pmap(get_address, .progress = TRUE) |> 
-  list_rbind()
-```
-
-### Page Info
-
-Finally, we will scrape the web pages for each destination on the wvtourism website. This will give us some more info like their website, phone, etc., as well as a description we can use when the user points on the icon on the map.
-
-```{r}
-reqs_pages = destinations_unique |> 
-  pull(url_wvtourism) |> 
-  map(get_request)
-
-resps_pages = reqs_pages |> 
-  req_perform_sequential(on_error = "continue")
-
-resps_failures_pages = resps_failures(resps_pages)
-resps_successes_pages = resps_successes(resps_pages)
-
-extract_page = function(resp) {
-  # Read Page
-  page = resp_body_html(resp)
-
-  # Extract data
-  description = page |> 
-    html_element(".desc") |> 
-    html_text2() |> 
-    str_replace_all("\n", " ") |> 
-    str_replace_all("  ", " ")
-  
-  website = page |> 
-    html_element(".meta_block--website a") |> 
-    html_attr("href")
-  
-  phone = page |> 
-    html_element('span[itemprop="telephone"]') |> 
-    html_text2()
-  
-  url_company = page |> 
-    html_element('a[itemprop="email"]') |> 
-    html_text2()
-
-  # Return tibble
-  data = tibble(
-    url_wvtourism = resp_url(resp),
-    description = description,
-    website = website,
-    phone = phone,
-    url_company = url_company
-  )
-
-  return(data)
-}
-
-results_pages = resps_successes_pages |> 
-  map(extract_page, .progress = TRUE) |> 
-  list_rbind()
+dbWriteTable(con, "destinations", destinations)
 ```
 
 ## Finalize
 
-With all of our scrapes done, we will build one final `destinations` table.
+Let's look at the tables we've created so far.
 
 ```{r}
-destinations = destinations_unique |> 
-  left_join(coords, join_by(url_wvtourism)) |> 
-  left_join(address, join_by(url_wvtourism)) |> 
-  left_join(results_pages, join_by(url_wvtourism)) |> 
-  mutate(
-    across(where(is.character), \(col) if_else(col == "", NA_character_, str_squish(col)))
-  )
+dbListTables(con) |> 
+  map(\(table) dbReadTable(con, table) |> as_tibble()) |> 
+  set_names(dbListTables(con))
 ```
 
-## Write to DB
-
-With everything situated, we will update our database.
+Everything looks good so we will close the DB connection.
 
 ```{r}
-destinations = destinations_unique |> 
-  left_join(coords, join_by(url_wvtourism)) |> 
-  left_join(address, join_by(url_wvtourism)) |> 
-
-dbWriteTable(con, "group_subgroup_category", group_subgroup_category)
-dbWriteTable(con, "destination_category", destination_category)
-dbWriteTable(con, "destinations", destinations)
-dbListTables(con) |> as_tibble_col(column_name = "tables")
 dbDisconnect(con)
 ```

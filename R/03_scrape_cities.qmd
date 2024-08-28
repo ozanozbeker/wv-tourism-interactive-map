@@ -17,7 +17,8 @@ library(DBI)
 
 source("R/functions/scraping.R")
 
-con = dbConnect(duckdb::duckdb(), "database.duckdb")
+con = dbConnect(duckdb::duckdb(), "duck.db")
+dbListTables(con) |> as_tibble_col("tables")
 ```
 
 ## Travel Regions
@@ -25,16 +26,24 @@ con = dbConnect(duckdb::duckdb(), "database.duckdb")
 The Travel Regions page is a homepage to all of the featured cities in the website. Each of the cities are grouped within a Travel Region.
 
 ```{r}
-req_home = get_request("https://wvtourism.com/places-to-go/travel-regions/")
-resp_home = req_perform(req_home)
+homepage_url = "https://wvtourism.com/places-to-go/travel-regions/"
+homepage_req = get_request(homepage_url)
+homepage_resp = req_perform(homepage_req)
+
+print(homepage_resp)
+
+homepage_info = extract_homepage_info(homepage_resp) |> 
+  rename(homepage = title) |> 
+  mutate(url = homepage_url)
+
+print(homepage_info)
+dbWriteTable(con, "homepages", homepage_info, append = TRUE)
 ```
 
-Since its only one response, I'm not worried about error handling since this is an interactive notebook.
-
-Now we need to extract the links for the Travel Regions and use them to extract the Cities.
+Now we need to extract the links for the Travel Regions, which will eventually lead to the Cities. We will also extract the page descriptions like we did for Groups and Categories.
 
 ```{r}
-travel_regions = resp_home |>
+travel_regions_urls = homepage_resp |>
   resp_body_html() |> 
   html_element("ul.ttd") |> 
   html_children() |> 
@@ -43,172 +52,58 @@ travel_regions = resp_home |>
   as_tibble_col() |> 
   unnest_wider(value) |> 
   select(travel_region = title, url = href)
+
+print(travel_regions_urls)
+
+travel_regions_reqs = travel_regions_urls |> 
+  pull(url) |> 
+  map(get_request)
+
+travel_regions_resps = travel_regions_reqs |> 
+  req_perform_sequential(on_error = "continue")
+
+travel_regions_resps_failures = resps_failures(travel_regions_resps) |> print()
+travel_regions_resps_successes = resps_successes(travel_regions_resps) |> print()
+
+travel_regions = travel_regions_resps_successes |> 
+  map(extract_homepage_info) |> 
+  list_rbind() |> 
+  rename(travel_region = title) |> 
+  left_join(travel_regions_urls, join_by(travel_region))
+
+print(travel_regions)
+dbWriteTable(con, "travel_regions", travel_regions)
 ```
 
 ## Cities
 
-Now that we have a links to all of the Travel Regions pages, we can extract the Cities from within.
+Now that we have the Travel Regions pages, we can extract the Cities from within. This will be very similar to the workflow above, but we will need to extract more information from the City pages.
 
 ```{r}
-reqs_travel_regions = travel_regions |> 
-  pull(url) |> 
-  map(get_request)
-
-resps_travel_regions = reqs_travel_regions |> 
-  req_perform_sequential(on_error = "continue") |> 
-  set_names(travel_regions |> pull(travel_region))
-```
-
-{httr2} takes care of error-handling for us, so if something goes wrong with the HTTP request, it will document that and continue. Here we continue with the successes from `links_request` and trouble shoot the failures if necessary.
-
-```{r}
-resps_failures_travel_regions = resps_failures(resps_travel_regions) |> print()
-resps_successes_travel_regions = resps_successes(resps_travel_regions) |> print()
-```
-
-Now we create a custom function to extract the Cities and iterate over the pages.
-
-```{r}
-extract_cities = function(resp) {
-
-  urls = resp |> 
-    resp_body_html() |> 
-    html_element("div.wvto-featured-pages") |> 
-    html_children() |>
-    html_children() |>
-    html_children() |>
-    html_children() |> 
-    html_attrs() |> 
-    as_tibble_col("url") |> 
-    unnest(url) |> 
-    distinct()
-  
-  df = urls |> 
-    mutate(
-      city = url |> 
-        str_remove("https://wvtourism.com/") |> 
-        str_remove_all("/") |> 
-        str_replace_all("-", " ") |> 
-        str_to_title()
-    )
-  
-  return(df)
-}
-
-cities = resps_successes_travel_regions |> 
-  map(extract_cities) |> 
+cities_urls = travel_regions_resps_successes |> 
+  map(extract_cities_urls) |> 
   list_rbind() |> 
   mutate( # Summersville & Hinton need fixes
     city = city |> 
       str_remove("Places To Go") |> 
       str_remove_all("\\d") |> 
       str_squish() |> 
-      str_to_title()) |> 
-  select(city, url)
-```
+      str_to_title()) 
 
-## City Info
+print(cities_urls)
 
-And finally we collect some info from the city pages.
-
-Working on this block, I found that the pages are not equally populated, so `extract_city_info` accounts for the different page types.
-
-```{r}
-reqs_cities = cities |> 
+cities_reqs = cities_urls |> 
   pull(url) |> 
   map(get_request)
 
-resps_cities = reqs_cities |> 
+cities_resps = cities_reqs |> 
   req_perform_sequential(on_error = "continue")
 
-resps_failures_cities = resps_failures(resps_cities) |> print()
-resps_successes_cities = resps_successes(resps_cities) |> print()
+cities_resps_failures = resps_failures(cities_resps) |> print()
+cities_resps_successes = resps_successes(cities_resps) |> print()
 
-extract_city_info = function(resp) {
-
-  page = resp |> resp_body_html()
-  
-  header_count = page |> 
-    html_elements("h3.wp-block-heading") |>
-    html_text2() |> 
-    as_tibble_col() |> 
-    filter(value != "") |> 
-    NROW()
-
-  if (header_count == 0) {
-    title = page |> 
-      html_element("h1") |> 
-      html_text()
-    
-    description = page |> 
-      html_element("div.desc") |> 
-      html_element("p") |> 
-      html_text2()
-    
-    categories = NULL
-  }
-  
-  if (header_count > 0) {
-    title = page |> 
-      html_element("h1.title") |> 
-      html_text2()
-    
-    description = page |> 
-      html_element(".wvto-hero") |> 
-      html_children() |> 
-      html_children() |> 
-      html_children() |>  
-      html_text2()
-    
-    # Shepherdstown
-    categories = page |> 
-      html_elements(".wp-block-group") |> 
-      html_children() |> 
-      html_children() |> 
-      html_text2() |> 
-      as_tibble_col("category") |> 
-      filter(category != "") |> 
-      slice_head(n = 2 * header_count) |> 
-      mutate(
-        row_number = row_number(),
-        description = lead(category)) |> 
-      filter(row_number %% 2 == 1) |> 
-      select(-row_number) |> 
-      pivot_wider(
-        names_from = category,
-        values_from = description)
-    
-    if (ncol(categories) != header_count) {
-      # Charleston
-      categories = page |> 
-        html_elements(".wp-block-columns")  |> 
-        html_children() |> 
-        html_children() |> 
-        html_text2() |> 
-        as_tibble_col("category") |> 
-        filter(category != "") |> 
-        slice_head(n = 2 * header_count) |> 
-        mutate(
-          row_number = row_number(),
-          description = lead(category)) |> 
-        filter(row_number %% 2 == 1) |> 
-        select(-row_number) |> 
-        pivot_wider(
-          names_from = category,
-          values_from = description)
-    }
-  }
-  
-  df = tibble(
-    city = title,
-    description = description) |> 
-    bind_cols(categories)
-  
-  return(df)
-}
-
-city_info = resps_successes_cities |> 
-  map(extract_city_info, .progress = TRUE) |> 
+cities = cities_resps_successes |> 
+  map(extract_city_info) |> 
   list_rbind() |> 
   mutate(
     city = city |> 
@@ -221,25 +116,26 @@ city_info = resps_successes_cities |>
       str_remove(description, ".*\\n"), 
       description),
     across(where(is.character), str_squish)) |> 
-  clean_names()
+  clean_names() |> 
+  left_join(cities_urls, join_by(city)) |> 
+  select(travel_region, city, everything())
+
+print(cities)
+dbWriteTable(con, "cities", cities)
 ```
 
-Now we combine all the data.
+## Finalize
+
+Let's look at the tables we've created so far.
 
 ```{r}
-cities_full = cities |> 
-  full_join(city_info, join_by(city))
-
-View(cities_full)
+dbListTables(con) |> 
+  map(\(table) dbReadTable(con, table) |> as_tibble()) |> 
+  set_names(dbListTables(con))
 ```
 
-## Write to DB
-
-Everything looks good, so we will write to the database.
+Everything looks good so we will close the DB connection.
 
 ```{r}
-dbWriteTable(con, "cities", cities_full)
-dbReadTable(con, "cities") |> as_tibble()
-dbListTables(con) |> as_tibble_col(column_name = "tables")
 dbDisconnect(con)
 ```
